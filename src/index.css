@@ -1,0 +1,52 @@
+.badge.badge-soft-danger {
+    background-color: rgba(241, 100, 108, .15) !important;
+    color: #f1646c !important;
+    -webkit-box-shadow: 0 0 13px 0 rgba(241, 100, 108, .05);
+    box-shadow: 0 0 13px 0 rgba(241, 100, 108, .05);
+}
+
+.badge {
+    display: inline-block;
+    min-width: 10px;
+    padding: 2px 4px;
+    font-size: var(--bs-body-font-size);
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border: 0.5px solid;
+    text-decoration: none;
+}
+
+.badge:empty {
+    display: none
+}
+
+.btn .badge {
+    position: relative;
+    top: -1px
+}
+
+.btn-xs .badge {
+    top: 0;
+    padding: 1px 5px
+}
+
+a.badge:hover,
+a.badge:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer
+}
+
+select[type="text"] {
+    width: 100%;
+    border: 2px solid #aaa;
+    border-radius: 4px;
+    margin: 8px 0;
+    outline: none;
+    padding: 8px;
+    box-sizing: border-box;
+    transition: 0.3s;
+}

@@ -15,10 +15,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
     reducers:{
     },
     extraReducers: (builder) => {
-        // Add reducers for additional action types here, and handle loading state as needed
+        
         builder.addCase(getMenus.fulfilled, (state, action) => {
-          // Add user to the state array
           state.menus=action.payload
+          state.loading=false;
+        }),
+        builder.addCase(getMenus.pending,(state,action)=>{
+          state.loading=true;
         })
       },
 });

@@ -10,7 +10,6 @@ import { getMenus } from "../Redux/Slice/menuSlice";
 function Menu2() {
   const [routingHeader, setRoutingHeader] = useState("Dashboard");
   const [sidebarToggle, setSidebarToggle] = useState("true");
-  const [listItems, setListItems] = useState([]);
 
   const dispatch = useDispatch();
   const menulist = useSelector((state) => state.menu);
@@ -33,16 +32,14 @@ function Menu2() {
   };
 
   useEffect(() => {
-    if (menulist.menus.length > 0) {
-      setListItems(menulist.menus);
-    }
-  }, [menulist]);
+    handleMenu();
+  }, []);
 
   return (
     <>
       <div className="wrapper d-flex align-items-stretch">
         <nav id="sidebar">
-          <div className="custom-menu">
+          {/* <div className="custom-menu">
             <button
               type="button"
               id="sidebarCollapse"
@@ -51,7 +48,7 @@ function Menu2() {
             >
               {<FaAlignJustify style={{ margin: "-7px -4px 3px" }} />}
             </button>
-          </div>
+          </div> */}
           <div className="img bg-wrap text-center py-4">
             <div className="user-logo">
               <div className="img"></div>
@@ -59,28 +56,26 @@ function Menu2() {
             </div>
           </div>
           <ul className="list-unstyled components mb-5">
-            {listItems?.map((item) => {
-              <li key={item.id}>{item.id}</li>;
-            })}
-
-            {}
-            <li className={routingHeader == "Dashboard" ? "bg-secondary" : ""}>
-              <Link to="/" onClick={() => setRoutingHeader("Dashboard")}>
-                <FaBox /> Dashboard
-              </Link>
-            </li>
-            <li className={routingHeader == "Company" ? "bg-secondary" : ""}>
-              <Link to="company" onClick={() => setRoutingHeader("Company")}>
-                <FaToolbox /> Company
-              </Link>
-            </li>
+            {menulist?.menus?.map((item) => (
+              <li
+                key={item.id}
+                className={
+                  routingHeader == item.headername ? "bg-secondary" : ""
+                }
+              >
+                <Link
+                  to={item.path}
+                  onClick={() => setRoutingHeader(item.headername)}
+                >
+                  <FaBox /> {item.menuname}
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
 
-        <div id="content" className="p-4 p-md-5 pt-5">
-          <Header name={routingHeader} />
-
-          <button onClick={handleMenu}>Click</button>
+        <div id="content">
+          <Header name={routingHeader} toggle={togllesidebar} />
           <Outlet />
         </div>
       </div>

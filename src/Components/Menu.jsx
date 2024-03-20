@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   CDBSidebar,
   CDBSidebarContent,
@@ -7,12 +7,34 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
 } from "cdbreact";
-import { NavLink } from "react-router-dom";
+
+import { NavLink, Outlet } from "react-router-dom";
+import Header from "./Header";
+import { getMenus } from "../Redux/Slice/menuSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Menu = () => {
+  const [routingHeader, setRoutingHeader] = useState("Dashboard");
+
+  const menulist = useSelector((state) => state.menu);
+  const dispatch = useDispatch();
+
+  const handleMenu = () => {
+    dispatch(getMenus());
+  };
+
+  useEffect(() => {
+    handleMenu();
+  }, []);
+
   return (
     <div
-      style={{ display: "flex", height: "100vh", overflow: "scroll initial" }}
+      style={{
+        display: "flex",
+        height: "100vh",
+        overflow: "scroll initial",
+        position: "relative",
+      }}
     >
       <CDBSidebar textColor="#fff" backgroundColor="#333">
         <CDBSidebarHeader prefix={<i className="fa fa-bars fa-large"></i>}>
@@ -27,7 +49,18 @@ const Menu = () => {
 
         <CDBSidebarContent className="sidebar-content">
           <CDBSidebarMenu>
-            <NavLink exact to="/" activeClassName="activeClicked">
+            {menulist?.menus?.map((item) => (
+              <NavLink
+                key={item.id}
+                to={item.path}
+                onClick={() => setRoutingHeader(item.headername)}
+              >
+                <CDBSidebarMenuItem icon="columns">
+                  {item.menuname}
+                </CDBSidebarMenuItem>
+              </NavLink>
+            ))}
+            {/* <NavLink exact to="/" activeClassName="activeClicked">
               <CDBSidebarMenuItem icon="columns">Dashboard</CDBSidebarMenuItem>
             </NavLink>
             <NavLink exact to="/company" activeClassName="activeClicked">
@@ -51,7 +84,7 @@ const Menu = () => {
               <CDBSidebarMenuItem icon="exclamation-circle">
                 404 page
               </CDBSidebarMenuItem>
-            </NavLink>
+            </NavLink> */}
           </CDBSidebarMenu>
         </CDBSidebarContent>
 
@@ -65,6 +98,10 @@ const Menu = () => {
           </div>
         </CDBSidebarFooter>
       </CDBSidebar>
+      <div style={{ overflow: "scroll", maxHeight: "100vh" }}>
+        <Header name={routingHeader} />
+        <Outlet />
+      </div>
     </div>
   );
 };

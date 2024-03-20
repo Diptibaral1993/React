@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, ListGroup } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addCompany } from "../Redux/Slice/companySlice";
+import { getCountry, getState } from "../Redux/Slice/locationSlice";
+import Loader from "../Components/Loader";
+import Toastcomponent from "../Components/Toastcomponent";
 function Company() {
   const [company, setCompany] = useState({
     id: 0,
@@ -18,9 +21,16 @@ function Company() {
     pincode: 5,
     status: 1,
   });
+  const apiResponse = useSelector((state) => state.company);
+  const apiLocationResponse = useSelector((state) => state.location);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCountry());
+  }, []);
+
   return (
-    <div className="row">
+    <>
       <div className="card" style={{ margin: "0rem", padding: "0rem" }}>
         <div className="card-body" style={{ textAlign: "left" }}>
           <div className="row">
@@ -109,12 +119,16 @@ function Company() {
                   value={company.country}
                   onChange={(e) => {
                     setCompany({ ...company, country: e.target.value });
+                    dispatch(getState(company.country));
                   }}
                   className="form-control"
                   type="text"
                 >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
+                  {apiLocationResponse.Gcountry.map((item) => (
+                    <option value={item.id} key={item.id}>
+                      {item.description}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -129,8 +143,11 @@ function Company() {
                   className="form-control"
                   type="text"
                 >
-                  <option value="volvo">Volvo</option>
-                  <option value="saab">Saab</option>
+                  {apiLocationResponse.Gstate.map((item) => (
+                    <option value={item.id} key={item.id}>
+                      {item.description}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>
@@ -188,13 +205,22 @@ function Company() {
                 className="mt-2"
                 onClick={() => dispatch(addCompany(company))}
               >
-                Sign Up
+                Add
               </Button>
             </div>
           </div>
         </div>
+        {apiResponse.loading && <Loader />}
+        {apiLocationResponse.loading && <Loader />}
       </div>
-    </div>
+      {apiResponse.response != "" && (
+        <Toastcomponent
+          color={apiResponse.response}
+          msg={apiResponse.msg}
+          header="Company"
+        />
+      )}
+    </>
   );
 }
 
