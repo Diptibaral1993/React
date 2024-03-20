@@ -68,7 +68,7 @@ function Layout() {
           </Navbar.Offcanvas>
         </Container>
       </Navbar>
-      <Card className="text-center" style={{ top: "-9vh" }}>
+      <Card className="text-center">
         <Card.Header>{routingHeader}</Card.Header>
         <Card.Body>
           <Outlet />
