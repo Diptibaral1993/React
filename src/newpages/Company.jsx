@@ -33,12 +33,15 @@ function Company() {
   const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     const form = event.currentTarget;
-    console.log(form.checkValidity());
+    console.log(form);
     if (form.checkValidity() === false) {
-      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      dispatch(addCompany(company));
     }
-    dispatch(addCompany(company));
+
     setValidated(true);
   };
 
@@ -46,7 +49,7 @@ function Company() {
     dispatch(getCountry());
   }, []);
   return (
-    <Form noValidate validated={validated}>
+    <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Row>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
           <FloatingLabel label="Company Name">
@@ -137,7 +140,7 @@ function Company() {
               value={company.country}
               onChange={(e) => {
                 setCompany({ ...company, country: e.target.value });
-                dispatch(getState(company.country));
+                // dispatch(getState(company.country));
               }}
             >
               <option value="">Select Country</option>
@@ -227,7 +230,7 @@ function Company() {
           </FloatingLabel>
         </Form.Group>
       </Row>
-      <Button variant="outline-success" onClick={handleSubmit}>
+      <Button variant="outline-success" type="submit">
         Submit
       </Button>{" "}
       {apiResponse.response != "" && (
