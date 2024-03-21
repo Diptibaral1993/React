@@ -3,7 +3,7 @@ import { Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { useState } from "react";
 function User() {
   const [user, setUser] = useState({
-    id: 1,
+    id: 0,
     employeecode: "",
     name: "",
     username: "",
@@ -39,9 +39,19 @@ function User() {
     updateddt: "",
     status: 1,
   });
-  console.log(user);
+  const [validated, setValidated] = useState(false);
+  //handle form submit here
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+    } else {
+    }
+  };
   return (
-    <Form>
+    <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Row>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
           <FloatingLabel label="Name">

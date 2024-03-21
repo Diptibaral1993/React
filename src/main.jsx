@@ -19,6 +19,10 @@ import Godown from "./Pages/Godown";
 import Location from "./Pages/Location";
 import Department from "./Pages/Department";
 import Designation from "./Pages/Designation";
+import Stock from "./Pages/Stock";
+import Item from "./Pages/Item";
+import Stockallocation from "./Pages/Stockallocation";
+import Stockdistribution from "./Pages/Stockdistribution";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -33,6 +37,10 @@ const router = createBrowserRouter([
       { path: "location", element: <Location /> },
       { path: "department", element: <Department /> },
       { path: "designation", element: <Designation /> },
+      { path: "stock", element: <Stock /> },
+      { path: "item", element: <Item /> },
+      { path: "allocation", element: <Stockallocation /> },
+      { path: "distribution", element: <Stockdistribution /> },
     ],
   },
 ]);

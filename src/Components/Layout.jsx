@@ -66,7 +66,7 @@ function Layout() {
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
-                Offcanvas
+                Welcome
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
