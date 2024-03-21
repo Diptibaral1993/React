@@ -15,6 +15,11 @@ export const addCompany=createAsyncThunk("addcompany",async (data)=>{
   }
   
 })
+
+export const getCompanies=createAsyncThunk("getcompanies",async(data)=>{
+  const response=await fetch("http://dn.deeds.services/api/company");
+  return response.json();
+})
   
 
 const companySlice = createSlice({
@@ -37,6 +42,26 @@ const companySlice = createSlice({
     }),
     builder.addCase(addCompany.pending,(state,action)=>{
       state.loading=true;
+      
+    }),
+
+
+    builder.addCase(getCompanies.fulfilled, (state, action) => {
+      state.response="success";
+      state.data=action.payload;
+      state.loading=false;
+      state.msg=""
+    }),
+    builder.addCase(getCompanies.rejected,(state,action)=>{
+      state.msg="Something Went Wrong !!";
+      state.loading=false;
+      state.response="danger";
+      state.msg="Something went wrong !!";
+    }),
+    builder.addCase(getCompanies.pending,(state,action)=>{
+      state.loading=true;
+      state.msg="";
+      state.response="";
       
     })
   }

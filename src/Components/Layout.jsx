@@ -32,7 +32,10 @@ function Layout() {
         className="bg-body-tertiary mb-3"
         sticky="top"
       >
-        <Container fluid>
+        <Container
+          fluid
+          style={{ backgroundColor: "cornflowerblue", padding: "10px" }}
+        >
           <Row>
             <Col xs={4} sm={4} md={4}>
               <Navbar.Toggle aria-controls="offcanvasNavbar-expand-false" />
@@ -48,6 +51,7 @@ function Layout() {
             aria-labelledby="offcanvasNavbarLabel-expand-false"
             placement="start"
             scroll="true"
+            style={{ backgroundColor: "cornflowerblue" }}
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
@@ -106,9 +110,11 @@ function Layout() {
           </Navbar.Offcanvas>
         </Container>
       </Navbar>
-      <Card className="text-center" style={{ margin: "3em" }}>
-        <Card.Header>{routingHeader}</Card.Header>
-        <Card.Body>
+      <Card className="text-center" style={{ margin: "1em" }}>
+        <Card.Header style={{ backgroundColor: "darkseagreen" }}>
+          {routingHeader}
+        </Card.Header>
+        <Card.Body style={{ backgroundColor: "aliceblue" }}>
           <Outlet />
         </Card.Body>
       </Card>

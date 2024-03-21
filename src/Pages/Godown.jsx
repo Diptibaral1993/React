@@ -1,196 +1,280 @@
-import React, { useState } from "react";
-import { Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { addGodown } from "../Redux/Slice/GodownSlice";
 import Loader from "../Components/Loader";
+import { getCompanies } from "../Redux/Slice/companySlice";
+import Toastcomponent from "../Components/Toastcomponent";
+import {
+  getArea,
+  getCity,
+  getCountry,
+  getState,
+  getPincode,
+} from "../Redux/Slice/locationSlice";
 function Godown() {
   const [godown, setGodown] = useState({
     id: 0,
     name: "",
-    country: 0,
-    state: 0,
-    city: 0,
-    area: 0,
-    pincode: 0,
+    country: "",
+    state: "",
+    city: "",
+    area: "",
+    pincode: "",
     contactperson: "",
     phone: "",
-    company: 0,
+    company: "",
     email: "",
     status: 1,
   });
 
+  const [validated, setValidated] = useState(false);
+
   const apiResponse = useSelector((state) => state.godown);
+  const apiLocationResponse = useSelector((state) => state.location);
+  const apiCompanyresponse = useSelector((state) => state.company);
   const dispatch = useDispatch();
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+    } else {
+      dispatch(addGodown(godown));
+      setValidated(false);
+      setGodown({
+        id: 0,
+        name: "",
+        country: "",
+        state: "",
+        city: "",
+        area: "",
+        pincode: "",
+        contactperson: "",
+        phone: "",
+        company: "",
+        email: "",
+        status: 1,
+      });
+    }
+  };
+
+  useEffect(() => {
+    dispatch(getCountry());
+    dispatch(getCompanies());
+  }, []);
+
   return (
-    <div className="card" style={{ margin: "0rem", padding: "0rem" }}>
-      <div className="card-body" style={{ textAlign: "left" }}>
-        <div className="row">
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">GodownName</label>
-              <input
+    <>
+      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+        <Row>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Godown Name">
+              <Form.Control
+                required
+                placeholder="Godown Name"
                 value={godown.name}
                 onChange={(e) => {
                   setGodown({ ...godown, name: e.target.value });
                 }}
-                className="form-control"
-                type="text"
-              ></input>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">Country</label>
-              <select
+              />
+              <Form.Control.Feedback type="invalid">
+                Enter Godown Name !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Company">
+              <Form.Select
+                required
+                value={godown.company}
+                onChange={(e) =>
+                  setGodown({ ...godown, company: e.target.value })
+                }
+              >
+                <option value="">Select Company</option>
+                {apiCompanyresponse.data.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.companyname}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Select Company !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Country">
+              <Form.Select
+                required
                 value={godown.country}
                 onChange={(e) => {
                   setGodown({ ...godown, country: e.target.value });
+                  dispatch(getState(e.target.value));
                 }}
-                className="form-control"
-                type="text"
               >
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">State</label>
-              <select
+                <option value="">Select Country</option>
+                {apiLocationResponse.Gcountry.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.description}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Select Country !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="State">
+              <Form.Select
+                required
                 value={godown.state}
                 onChange={(e) => {
                   setGodown({ ...godown, state: e.target.value });
+                  dispatch(getCity(e.target.value));
                 }}
-                className="form-control"
-                type="text"
               >
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">City</label>
-              <select
+                <option value="">Select State</option>
+                {apiLocationResponse?.Gstate.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.description}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Select State !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="City">
+              <Form.Select
+                required
                 value={godown.city}
                 onChange={(e) => {
                   setGodown({ ...godown, city: e.target.value });
+                  dispatch(getArea(e.target.value));
                 }}
-                className="form-control"
-                type="text"
               >
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">Area</label>
-              <select
+                <option value="">Select City</option>
+                {apiLocationResponse.Gcity.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.description}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Select City !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Area">
+              <Form.Select
+                required
                 value={godown.area}
                 onChange={(e) => {
                   setGodown({ ...godown, area: e.target.value });
+                  dispatch(getPincode(e.target.value));
                 }}
-                className="form-control"
-                type="text"
               >
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">PinCode</label>
-              <select
+                <option value="">Select Area</option>
+                {apiLocationResponse.Garea.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.description}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Select Area !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Pincode">
+              <Form.Select
+                required
                 value={godown.pincode}
                 onChange={(e) => {
                   setGodown({ ...godown, pincode: e.target.value });
                 }}
-                className="form-control"
-                type="text"
               >
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">ContactPerson</label>
-              <input
+                <option value="">Select Pincode</option>
+                {apiLocationResponse.Gpincode.map((item, index) => (
+                  <option key={index} value={item.id}>
+                    {item.description}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Select Pincode !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Contactperson Name">
+              <Form.Control
+                required
+                placeholder="Contactperson Name"
                 value={godown.contactperson}
                 onChange={(e) => {
                   setGodown({ ...godown, contactperson: e.target.value });
                 }}
-                className="form-control"
-                type="text"
-              ></input>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">Phone</label>
-              <input
+              />
+              <Form.Control.Feedback type="invalid">
+                Enter Contactperson Name !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Phone Number">
+              <Form.Control
+                required
+                placeholder="Phone Number"
                 value={godown.phone}
                 onChange={(e) => {
                   setGodown({ ...godown, phone: e.target.value });
                 }}
-                className="form-control"
-                type="text"
-              ></input>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">Company</label>
-              <select
-                value={godown.company}
-                onChange={(e) => {
-                  setGodown({ ...godown, company: e.target.value });
-                }}
-                className="form-control"
-                type="text"
-              >
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <label className="control-label">Email</label>
-              <input
-                className="form-control"
-                type="text"
+              />
+              <Form.Control.Feedback type="invalid">
+                Enter Phone Number !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="E-mail">
+              <Form.Control
+                required
+                placeholder="E-mail"
                 value={godown.email}
-                onChange={(e) =>
-                  setGodown({ ...godown, email: e.target.value })
-                }
-              ></input>
-            </div>
-          </div>
-          <div className="col-md-12 text-center mt-2">
-            <Button
-              type="submit"
-              variant="success"
-              className="mt-2"
-              onClick={() => dispatch(addGodown(godown))}
-            >
-              Submit
-            </Button>
-            <Button variant="danger" type="submit" className="mt-2">
-              Close
-            </Button>
-          </div>
-        </div>
-      </div>
+                onChange={(e) => {
+                  setGodown({ ...godown, email: e.target.value });
+                }}
+              />
+              <Form.Control.Feedback type="invalid">
+                Enter E-mail !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+        </Row>
+        <Button variant="outline-success" type="submit">
+          Submit
+        </Button>{" "}
+      </Form>
       {apiResponse.loading && <Loader />}
-    </div>
+      {apiResponse.isSuccess && (
+        <Toastcomponent
+          color={apiResponse.response}
+          msg={apiResponse.msg}
+          header="Godown"
+        />
+      )}
+    </>
   );
 }
 

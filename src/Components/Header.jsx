@@ -11,7 +11,7 @@ function Header(props) {
         textAlign: "center",
       }}
     >
-      <div class="container-fluid">
+      <div className="container-fluid">
         <h4>{props.name}</h4>
         <BsArrowsFullscreen
           style={{ margin: "18px", fontSize: "25px" }}
