@@ -1,42 +1,28 @@
-import React from "react";
-import { Button, Modal } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { Row, Form, Col, FloatingLabel, Button, Modal } from "react-bootstrap";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import $ from "jquery";
+import Locationmodal from "../Components/Locationmodal";
+import Toastcomponent from "../Components/Toastcomponent";
+import Loader from "../Components/Loader";
+import { clearStateLocation } from "../Redux/Slice/locationSlice";
+import {
+  getArea,
+  getCity,
+  getCountry,
+  getState,
+  getPincode,
+} from "../Redux/Slice/locationSlice";
+
 function Location() {
+  const apiLocationResponse = useSelector((state) => state.location);
   const dispatch = useDispatch();
 
-  const [modalState, setShow] = useState({
-    coutryMdl: false,
-    stateMdl: false,
-    cityMdl: false,
-    areaMdl: false,
-    pincodeMdl: false,
-  });
-  const countryModalClose = () => setShow({ ...modalState, coutryMdl: false });
-  // const CountrymdleShow = () => setShow(true);
+  console.log(apiLocationResponse);
 
-  // const [showStateModal, setStateShow] = useState(false);
-  const stateModalClose = () =>
-    setStateShow({ ...modalState, stateMdl: false });
-  // const StatemdleShow = () => setStateShow(true);
-
-  // const [showCityModal, setCityShow] = useState(false);
-  const cityModalClose = () => setCityShow({ ...modalState, cityMdl: false });
-  // const citymdleShow = () => setCityShow(true);
-
-  // const [showAreaModal, setAreaShow] = useState(false);
-  const areaModalClose = () => setAreaShow({ ...modalState, areaMdl: false });
-  // const areamdleShow = () => setAreaShow(true);
-  const hideModal = (ev) => {
-    setShow({ ...modalState, coutryMdl: false });
-    $(".modal-backdrop").remove();
-    console.log(ev);
-  };
-  console.log(modalState);
   const [location, setLocation] = useState({
-    coutry: 0,
+    country: 0,
     state: 0,
     city: 0,
     area: 0,
@@ -48,292 +34,272 @@ function Location() {
     pinCode: "",
   });
 
+  const [show, setShow] = useState({
+    visible: false,
+    header: "",
+    reference: 0,
+  });
+
+  useEffect(() => {
+    dispatch(getCountry());
+  }, []);
+
+  useEffect(() => {
+    if (apiLocationResponse.response != "") {
+      setShow({ visible: false, header: "", reference: 0 });
+    }
+
+    if (apiLocationResponse.isSuccess) {
+      setTimeout(() => {
+        dispatch(clearStateLocation());
+      }, 3000);
+    }
+  }, [apiLocationResponse]);
+
   return (
-    <div className="card" style={{ margin: "0rem", padding: "0rem" }}>
-      <div className="card-body" style={{ textAlign: "left" }}>
-        <div className="row">
-          <div className="col-md-4">
-            <div className="form-group">
-              <Link
-                onClick={() => setShow({ ...modalState, coutryMdl: true })}
-                name="Country"
-                className="badge badge-soft-danger float-end"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <i className="fa fa-plus-circle" aria-hidden="true"></i>
-                &nbsp;| New
-              </Link>
-              <label className="control-label">Country</label>
-              <select className="form-control" type="text"></select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <Link
-                onClick={() => setShow({ ...modalState, stateMdl: true })}
-                name="State"
-                className="badge badge-soft-danger float-end"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <i className="fa fa-plus-circle" aria-hidden="true"></i>
-                &nbsp;| New
-              </Link>
-              <label className="control-label">State</label>
-              <select className="form-control" type="text">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <Link
-                onClick={() => setShow({ ...modalState, cityMdl: true })}
-                name="City"
-                className="badge badge-soft-danger float-end"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <i className="fa fa-plus-circle" aria-hidden="true"></i>
-                &nbsp;| New
-              </Link>
-              <label className="control-label">City</label>
-              <select className="form-control" type="text">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          {/* <div className="col-md-4">
-                                    <div className="form-group">
-                                        <a name="Country" href="#" className="badge badge-soft-danger float-end" data-toggle="modal" data-target="#exampleModal" ><i className="fa fa-plus-circle" aria-hidden="true"></i>&nbsp;| New</a>
-                                        <label className="control-label">City</label>
-                                        <select className="form-control" type="text">
-                                            <option value="volvo">Volvo</option>
-                                            <option value="saab">Saab</option>
-                                        </select>
-                                    </div>
-                                </div> */}
-          <div className="col-md-4">
-            <div className="form-group">
-              <Link
-                name="Country"
-                onClick={() => setShow({ ...modalState, areaMdl: true })}
-                className="badge badge-soft-danger float-end"
-              >
-                <i className="fa fa-plus-circle" aria-hidden="true"></i>
-                &nbsp;| New
-              </Link>
-              <label className="control-label">Area</label>
-              <select className="form-control" type="text">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="form-group">
-              <Link
-                name="Country"
-                onClick={() => setShow({ ...modalState, pincodeMdl: true })}
-                className="badge badge-soft-danger float-end"
-                data-toggle="modal"
-                data-target="#exampleModal"
-              >
-                <i className="fa fa-plus-circle" aria-hidden="true"></i>
-                &nbsp;| New
-              </Link>
-              <label className="control-label">Pin</label>
-              <select className="form-control" type="text">
-                <option value="volvo">Volvo</option>
-                <option value="saab">Saab</option>
-              </select>
-            </div>
-          </div>
-          <div className="col-md-12 text-center mt-2">
-            <button className="btn btn-primary btn-sm" type="submit">
-              Submit
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <Modal
-        show={modalState.coutryMdl}
-        onHide={countryModalClose}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title className="d-flex justify-content-center">
-            Country
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <label className="control-label">Country</label>
-          <input
-            value={location.coutryName}
-            onChange={(e) =>
-              setLocation({ ...location, coutryName: e.target.value })
-            }
-            className="form-control"
-            type="text"
-          ></input>
-        </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-center">
-          <Button variant="primary">Save</Button>
-          <Button variant="danger" onClick={hideModal}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={modalState.stateMdl}>
-        <Modal.Header closeButton>
-          <Modal.Title className="d-flex justify-content-center">
-            State
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <label className="control-label">Country</label>
-          <select
-            value={location.coutry}
-            onChange={(e) =>
-              setLocation({ ...location, coutry: e.target.value })
-            }
-            className="form-control"
-            type="text"
+    <>
+      <Row>
+        <Form.Group
+          as={Col}
+          md={4}
+          sm={6}
+          xs={12}
+          className="mb-3"
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <FloatingLabel
+            label="Country"
+            style={{ width: "-webkit-fill-available" }}
           >
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-          </select>
-          <label className="control-label">StateName</label>
-          <input
-            value={location.stateName}
-            onChange={(e) =>
-              setLocation({ ...location, stateName: e.target.value })
-            }
-            className="form-control"
-            type="text"
-          ></input>
-        </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-center">
-          <Button variant="primary">Save</Button>
+            <Form.Select
+              required
+              value={location.country}
+              onChange={(e) => {
+                setLocation({ ...location, country: e.target.value });
+                dispatch(getState(e.target.value));
+              }}
+            >
+              <option value="">Select Country</option>
+              {apiLocationResponse.Gcountry.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.description}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Select Country !!
+            </Form.Control.Feedback>
+          </FloatingLabel>
           <Button
             variant="danger"
-            onClick={() => setShow({ ...modalState, stateMdl: false })}
-          >
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={modalState.cityMdl}>
-        <Modal.Header closeButton>
-          <Modal.Title className="d-flex justify-content-center">
-            City
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <label className="control-label">Country</label>
-          <select
-            value={location.coutry}
-            onChange={(e) =>
-              setLocation({ ...location, coutry: e.target.value })
+            onClick={() =>
+              setShow({
+                ...show,
+                visible: true,
+                header: "Country",
+                reference: 0,
+              })
             }
-            className="form-control"
-            type="text"
           >
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-          </select>
-          <label className="control-label">StateName</label>
-          <select
-            value={location.state}
-            onChange={(e) =>
-              setLocation({ ...location, state: e.target.value })
-            }
-            className="form-control"
-            type="text"
+            +
+          </Button>{" "}
+        </Form.Group>
+        <Form.Group
+          as={Col}
+          md={4}
+          sm={6}
+          xs={12}
+          className="mb-3"
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <FloatingLabel
+            label="State"
+            style={{ width: "-webkit-fill-available" }}
           >
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-          </select>
-          <label className="control-label">CityName</label>
-          <input
-            value={location.cityName}
-            onChange={(e) =>
-              setLocation({ ...location, cityName: e.target.value })
-            }
-            className="form-control"
-            type="text"
-          ></input>
-        </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-center">
-          <Button variant="primary">Save</Button>
+            <Form.Select
+              required
+              value={location.state}
+              onChange={(e) => {
+                setLocation({ ...location, state: e.target.value });
+                dispatch(getCity(e.target.value));
+              }}
+            >
+              <option value="">Select State</option>
+              {apiLocationResponse?.Gstate.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.description}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Select State !!
+            </Form.Control.Feedback>
+          </FloatingLabel>
           <Button
             variant="danger"
-            onClick={() => setShow({ ...modalState, cityMdl: false })}
-          >
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
-      <Modal show={modalState.areaMdl}>
-        <Modal.Header closeButton>
-          <Modal.Title className="d-flex justify-content-center">
-            Area
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <label className="control-label">Country</label>
-          <select
-            value={location.coutry}
-            onChange={(e) =>
-              setLocation({ ...location, coutry: e.target.value })
+            onClick={() =>
+              setShow({
+                ...show,
+                visible: true,
+                header: "State",
+                reference: location.country,
+              })
             }
-            className="form-control"
-            type="text"
           >
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-          </select>
-          <label className="control-label">StateName</label>
-          <select
-            value={location.state}
-            onChange={(e) =>
-              setLocation({ ...location, state: e.target.value })
-            }
-            className="form-control"
-            type="text"
+            +
+          </Button>{" "}
+        </Form.Group>
+        <Form.Group
+          as={Col}
+          md={4}
+          sm={6}
+          xs={12}
+          className="mb-3"
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <FloatingLabel
+            label="City"
+            style={{ width: "-webkit-fill-available" }}
           >
-            <option value="volvo">Volvo</option>
-            <option value="saab">Saab</option>
-          </select>
-          <label className="control-label">CityName</label>
-          <input
-            value={location.cityName}
-            onChange={(e) =>
-              setLocation({ ...location, cityName: e.target.value })
-            }
-            className="form-control"
-            type="text"
-          ></input>
-        </Modal.Body>
-        <Modal.Footer className="d-flex justify-content-center">
-          <Button variant="primary">Save</Button>
+            <Form.Select
+              required
+              value={location.city}
+              onChange={(e) => {
+                setLocation({ ...location, city: e.target.value });
+                dispatch(getArea(e.target.value));
+              }}
+            >
+              <option value="">Select City</option>
+              {apiLocationResponse.Gcity.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.description}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Select City !!
+            </Form.Control.Feedback>
+          </FloatingLabel>
           <Button
             variant="danger"
-            onClick={() => setShow({ ...modalState, areaMdl: false })}
+            onClick={() =>
+              setShow({
+                ...show,
+                visible: true,
+                header: "City",
+                reference: location.state,
+              })
+            }
           >
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </div>
+            +
+          </Button>{" "}
+        </Form.Group>
+        <Form.Group
+          as={Col}
+          md={4}
+          sm={6}
+          xs={12}
+          className="mb-3"
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <FloatingLabel
+            label="Area"
+            style={{ width: "-webkit-fill-available" }}
+          >
+            <Form.Select
+              required
+              value={location.area}
+              onChange={(e) => {
+                setLocation({ ...location, area: e.target.value });
+                dispatch(getPincode(e.target.value));
+              }}
+            >
+              <option value="">Select Area</option>
+              {apiLocationResponse.Garea.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.description}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Select Area !!
+            </Form.Control.Feedback>
+          </FloatingLabel>
+          <Button
+            variant="danger"
+            onClick={() =>
+              setShow({
+                ...show,
+                visible: true,
+                header: "Area",
+                reference: location.city,
+              })
+            }
+          >
+            +
+          </Button>{" "}
+        </Form.Group>
+        <Form.Group
+          as={Col}
+          md={4}
+          sm={6}
+          xs={12}
+          className="mb-3"
+          style={{ display: "flex", flexDirection: "row" }}
+        >
+          <FloatingLabel
+            label="Pincode"
+            style={{ width: "-webkit-fill-available" }}
+          >
+            <Form.Select
+              required
+              value={location.pincode}
+              onChange={(e) => {
+                setLocation({ ...location, pincode: e.target.value });
+              }}
+            >
+              <option value="">Select Pincode</option>
+              {apiLocationResponse.Gpincode.map((item, index) => (
+                <option key={index} value={item.id}>
+                  {item.description}
+                </option>
+              ))}
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Select Pincode !!
+            </Form.Control.Feedback>
+          </FloatingLabel>
+          <Button
+            variant="danger"
+            onClick={() =>
+              setShow({
+                ...show,
+                visible: true,
+                header: "Pincode",
+                reference: location.area,
+              })
+            }
+          >
+            +
+          </Button>{" "}
+        </Form.Group>
+      </Row>
+      {apiLocationResponse.loading && <Loader />}
+      {apiLocationResponse.isSuccess && (
+        <Toastcomponent
+          color={apiLocationResponse.response}
+          msg={apiLocationResponse.msg}
+          header="Location"
+        />
+      )}
+
+      <Locationmodal
+        visible={show.visible}
+        handler={() => setShow({ ...show, visible: false })}
+        header={show.header}
+        uplink={show.reference}
+      />
+    </>
   );
 }
 

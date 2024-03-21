@@ -13,10 +13,12 @@ import Home from "./Pages/Home";
 import User from "./Pages/User";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store";
-// import Company from "./Pages/Company";
-import Company from "./newpages/Company";
+import Company from "./Pages/Company";
+
 import Godown from "./Pages/Godown";
 import Location from "./Pages/Location";
+import Department from "./Pages/Department";
+import Designation from "./Pages/Designation";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -29,6 +31,8 @@ const router = createBrowserRouter([
       { path: "company", element: <Company /> },
       { path: "godown", element: <Godown /> },
       { path: "location", element: <Location /> },
+      { path: "department", element: <Department /> },
+      { path: "designation", element: <Designation /> },
     ],
   },
 ]);

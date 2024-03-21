@@ -10,6 +10,7 @@ import { getMenus } from "../Redux/Slice/menuSlice";
 import { Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import ListGroup from "react-bootstrap/ListGroup";
 
 function Layout() {
   const [routingHeader, setRoutingHeader] = useState("Dashboard");
@@ -42,9 +43,11 @@ function Layout() {
           </Row>
 
           <Navbar.Offcanvas
+            animation="false"
             id="offcanvasNavbar-expand-false"
             aria-labelledby="offcanvasNavbarLabel-expand-false"
             placement="start"
+            scroll="true"
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
@@ -64,11 +67,46 @@ function Layout() {
                   </Nav.Link>
                 ))}
               </Nav>
+              {/* <ListGroup as="ul" style={{ textAlign: "center" }}>
+                <ListGroup.Item
+                  as="li"
+                  style={{
+                    marginLeft: "-20px",
+                    marginRight: "-20px",
+                    marginBottom: "10px",
+                    backgroundColor: "bisque",
+                  }}
+                >
+                  Cras justo odio
+                </ListGroup.Item>
+                <ListGroup.Item
+                  as="li"
+                  style={{
+                    marginLeft: "-20px",
+                    marginRight: "-20px",
+                    marginBottom: "10px",
+                    backgroundColor: "bisque",
+                  }}
+                >
+                  Cras justo odio
+                </ListGroup.Item>
+                <ListGroup.Item
+                  as="li"
+                  style={{
+                    marginLeft: "-20px",
+                    marginRight: "-20px",
+                    marginBottom: "10px",
+                    backgroundColor: "bisque",
+                  }}
+                >
+                  Cras justo odio
+                </ListGroup.Item>
+              </ListGroup> */}
             </Offcanvas.Body>
           </Navbar.Offcanvas>
         </Container>
       </Navbar>
-      <Card className="text-center">
+      <Card className="text-center" style={{ margin: "3em" }}>
         <Card.Header>{routingHeader}</Card.Header>
         <Card.Body>
           <Outlet />

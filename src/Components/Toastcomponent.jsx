@@ -9,7 +9,11 @@ function AutohideExample(props) {
     setShow(true);
   }, []);
   return (
-    <ToastContainer className="p-3" position="bottom-end" style={{ zIndex: 1 }}>
+    <ToastContainer
+      className="p-3"
+      position="bottom-end"
+      style={{ zIndex: 1, position: "fixed" }}
+    >
       <Toast
         bg={props.color}
         onClose={() => setShow(false)}
