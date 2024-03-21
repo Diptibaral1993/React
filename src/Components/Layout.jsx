@@ -10,7 +10,7 @@ import { getMenus } from "../Redux/Slice/menuSlice";
 import { Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ListGroup from "react-bootstrap/ListGroup";
+import { FaBabyCarriage } from "react-icons/fa";
 
 function Layout() {
   const [routingHeader, setRoutingHeader] = useState("Dashboard");
@@ -62,7 +62,7 @@ function Layout() {
             aria-labelledby="offcanvasNavbarLabel-expand-false"
             placement="start"
             scroll="true"
-            style={{ backgroundColor: "cornflowerblue" }}
+            style={{ backgroundColor: "cornflowerblue", width: "18em" }}
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title id="offcanvasNavbarLabel-expand-false">
@@ -70,53 +70,37 @@ function Layout() {
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <Nav className="justify-content-end flex-grow-1 pe-3">
+              <Nav
+                className="justify-content-end flex-grow-1 pe-3"
+                style={{ marginRight: "-33px", marginLeft: "25px" }}
+              >
                 {menulist?.menus?.map((item) => (
                   <Nav.Link
                     as={Link}
                     key={item.id}
                     to={item.path}
                     onClick={() => setRoutingHeader(item.headername)}
+                    style={{
+                      backgroundColor: "aliceblue",
+                      borderTopLeftRadius: "10px",
+                      borderBottomLeftRadius: "10px",
+                      marginBottom: "5px",
+                      fontFamily: "monospace",
+                      fontWeight: "bold",
+                    }}
                   >
+                    {/* <FaBabyCarriage
+                      size="25px"
+                      style={{
+                        marginLeft: "20px",
+                        marginRight: "10px",
+                      }}
+                    /> */}
+                    <img src={item.icon} />
                     {item.menuname}
                   </Nav.Link>
                 ))}
               </Nav>
-              {/* <ListGroup as="ul" style={{ textAlign: "center" }}>
-                <ListGroup.Item
-                  as="li"
-                  style={{
-                    marginLeft: "-20px",
-                    marginRight: "-20px",
-                    marginBottom: "10px",
-                    backgroundColor: "bisque",
-                  }}
-                >
-                  Cras justo odio
-                </ListGroup.Item>
-                <ListGroup.Item
-                  as="li"
-                  style={{
-                    marginLeft: "-20px",
-                    marginRight: "-20px",
-                    marginBottom: "10px",
-                    backgroundColor: "bisque",
-                  }}
-                >
-                  Cras justo odio
-                </ListGroup.Item>
-                <ListGroup.Item
-                  as="li"
-                  style={{
-                    marginLeft: "-20px",
-                    marginRight: "-20px",
-                    marginBottom: "10px",
-                    backgroundColor: "bisque",
-                  }}
-                >
-                  Cras justo odio
-                </ListGroup.Item>
-              </ListGroup> */}
             </Offcanvas.Body>
           </Navbar.Offcanvas>
         </Container>
