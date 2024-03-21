@@ -38,10 +38,21 @@ function Layout() {
         >
           <Row>
             <Col xs={4} sm={4} md={4}>
-              <Navbar.Toggle aria-controls="offcanvasNavbar-expand-false" />
+              <Navbar.Toggle
+                className="bg-light"
+                aria-controls="offcanvasNavbar-expand-false"
+              />
             </Col>
             <Col xs={8} sm={8} md={8}>
-              <Navbar.Brand>Dn-Peripherial</Navbar.Brand>
+              <Navbar.Brand
+                style={{
+                  color: "white",
+                  fontWeight: "bolder",
+                  fontSize: "xx-large",
+                }}
+              >
+                Dn-Peripherial
+              </Navbar.Brand>
             </Col>
           </Row>
 
@@ -111,10 +122,21 @@ function Layout() {
         </Container>
       </Navbar>
       <Card className="text-center" style={{ margin: "1em" }}>
-        <Card.Header style={{ backgroundColor: "darkseagreen" }}>
+        <Card.Header
+          style={{
+            backgroundColor: "darkseagreen",
+            color: "white",
+            fontWeight: "bolder",
+            fontSize: "x-large",
+          }}
+        >
           {routingHeader}
         </Card.Header>
-        <Card.Body style={{ backgroundColor: "aliceblue" }}>
+        <Card.Body
+          style={{
+            backgroundColor: "aliceblue",
+          }}
+        >
           <Outlet />
         </Card.Body>
       </Card>
