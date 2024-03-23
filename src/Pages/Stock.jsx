@@ -17,8 +17,39 @@ function Stock() {
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Row>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+          <FloatingLabel label="Company">
+            <Form.Select required>
+              <option value="">Select Company</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Select Company!!
+            </Form.Control.Feedback>
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+          <FloatingLabel label="GoDown">
+            <Form.Select required>
+              <option value="">Select GoDown</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Select Company!!
+            </Form.Control.Feedback>
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
           <FloatingLabel label="Item">
-            <Form.Control required placeholder="Item" />
+            <Form.Select required>
+              <option value="">Select Item</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </Form.Select>
             <Form.Control.Feedback type="invalid">
               Enter Item Name !!
             </Form.Control.Feedback>

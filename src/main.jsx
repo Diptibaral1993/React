@@ -23,6 +23,13 @@ import Stock from "./Pages/Stock";
 import Item from "./Pages/Item";
 import Stockallocation from "./Pages/Stockallocation";
 import Stockdistribution from "./Pages/Stockdistribution";
+import UserList from "./Pages/ListPages/UserList";
+import GoDownList from "./Pages/ListPages/GodownList";
+import ItemList from "./Pages/ListPages/ItemList";
+import DealerList from "./Pages/ListPages/DealerList";
+import Dealer from "./Pages/Dealer";
+import DealerMapping from "./Pages/DealerMapping";
+import CompanyList from "./Pages/ListPages/CompanyList";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -31,16 +38,35 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       { path: "", element: <Home /> },
-      { path: "user", element: <User /> },
-      { path: "company", element: <Company /> },
-      { path: "godown", element: <Godown /> },
+
+      //Company Route
+      { path: "company/add", element: <Company /> },
+      { path: "company", element: <CompanyList /> },
+
+      //Godown Route
+      { path: "godown/add", element: <Godown /> },
+      { path: "godown", element: <GoDownList /> },
       { path: "location", element: <Location /> },
       { path: "department", element: <Department /> },
       { path: "designation", element: <Designation /> },
+
+      //Stock Route
       { path: "stock", element: <Stock /> },
-      { path: "item", element: <Item /> },
-      { path: "allocation", element: <Stockallocation /> },
-      { path: "distribution", element: <Stockdistribution /> },
+      { path: "stock/allocation", element: <Stockallocation /> },
+      { path: "stock/distribution", element: <Stockdistribution /> },
+
+      //user Route
+      { path: "user", element: <UserList /> },
+      { path: "user/add", element: <User /> },
+
+      //item route
+      { path: "item", element: <ItemList /> },
+      { path: "item/add", element: <Item /> },
+
+      //Dealers Route
+      { path: "dealer", element: <DealerList /> },
+      { path: "dealer/add", element: <Dealer /> },
+      { path: "dealer/mapping", element: <DealerMapping /> },
     ],
   },
 ]);

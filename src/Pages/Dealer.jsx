@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { useState } from "react";
-function Stockallocation() {
+function Dealer() {
   const [validated, setValidated] = useState(false);
   //handle form submit here
   const handleSubmit = (event) => {
@@ -17,62 +17,91 @@ function Stockallocation() {
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Row>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-          <FloatingLabel label="Company">
+          <FloatingLabel label="Name">
+            <Form.Control required placeholder="Name" />
+            <Form.Control.Feedback type="invalid">
+              Enter Dealer Name!!
+            </Form.Control.Feedback>
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+          <FloatingLabel label="Phone">
+            <Form.Control required placeholder="Phone" />
+            <Form.Control.Feedback type="invalid">
+              Enter Dealer Phone!!
+            </Form.Control.Feedback>
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+          <FloatingLabel label="Email">
+            <Form.Control required placeholder="Email" />
+            <Form.Control.Feedback type="invalid">
+              Enter Email!!
+            </Form.Control.Feedback>
+          </FloatingLabel>
+        </Form.Group>
+        <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+          <FloatingLabel label="Country">
             <Form.Select required>
-              <option value="">Select Company</option>
+              <option value="">Select Country</option>
               <option value="1">One</option>
               <option value="2">Two</option>
               <option value="3">Three</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">
-              Select Company!!
+              Select Country !!
             </Form.Control.Feedback>
           </FloatingLabel>
         </Form.Group>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-          <FloatingLabel label="GoDown">
+          <FloatingLabel label="State">
             <Form.Select required>
-              <option value="">Select GoDown</option>
+              <option value="">Select State</option>
               <option value="1">One</option>
               <option value="2">Two</option>
               <option value="3">Three</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">
-              Select Company!!
+              Select State !!
             </Form.Control.Feedback>
           </FloatingLabel>
         </Form.Group>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-          <FloatingLabel label="Sales Executive">
+          <FloatingLabel label="City">
             <Form.Select required>
-              <option value="">Select Sale Executive</option>
+              <option value="">Select City</option>
               <option value="1">One</option>
               <option value="2">Two</option>
               <option value="3">Three</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">
-              Select Sales Executive!!
+              Select City !!
             </Form.Control.Feedback>
           </FloatingLabel>
         </Form.Group>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-          <FloatingLabel label="Item">
+          <FloatingLabel label="Area">
             <Form.Select required>
-              <option value="">Select Item</option>
+              <option value="">Select Area</option>
               <option value="1">One</option>
               <option value="2">Two</option>
               <option value="3">Three</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">
-              Enter Item Name !!
+              Select Area !!
             </Form.Control.Feedback>
           </FloatingLabel>
         </Form.Group>
         <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-          <FloatingLabel label="Quantity">
-            <Form.Control required placeholder="Quantity" />
+          <FloatingLabel label="PinCode">
+            <Form.Select required>
+              <option value="">Select PinCode</option>
+              <option value="1">One</option>
+              <option value="2">Two</option>
+              <option value="3">Three</option>
+            </Form.Select>
             <Form.Control.Feedback type="invalid">
-              Enter Quantity!!
+              Select PinCode !!
             </Form.Control.Feedback>
           </FloatingLabel>
         </Form.Group>
@@ -87,4 +116,4 @@ function Stockallocation() {
   );
 }
 
-export default Stockallocation;
+export default Dealer;
