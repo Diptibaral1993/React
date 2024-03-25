@@ -12,7 +12,7 @@ import {
   getPincode,
 } from "../Redux/Slice/locationSlice";
 import Button from "react-bootstrap/Button";
-import { addCompany } from "../Redux/Slice/companySlice";
+import { addCompany, clearStateCompany } from "../Redux/Slice/companySlice";
 import Toastcomponent from "../Components/Toastcomponent.jsx";
 import Loader from "../Components/Loader.jsx";
 
@@ -68,9 +68,19 @@ function Company() {
     }
   };
 
-  //Get Country Dropdown data
+  useEffect(() => {
+    if (apiResponse.isSuccess) {
+      setTimeout(() => {
+        dispatch(clearStateCompany());
+      }, 3000);
+    }
+  }, [apiResponse]);
 
-  const countryDdl = () => {};
+  useEffect(() => {
+    if (company.companyname == "") {
+      dispatch(clearStateCompany());
+    }
+  }, [company]);
 
   //On pgaeload Event Fire to Get Menu
   useEffect(() => {

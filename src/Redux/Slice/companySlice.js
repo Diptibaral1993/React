@@ -24,16 +24,22 @@ export const getCompanies=createAsyncThunk("getcompanies",async(data)=>{
 
 const companySlice = createSlice({
   name: "company",
-  initialState: {data:[],response:"",successmsg:"",msg:"",loading:false},
+  initialState: {data:[],response:"",isSuccess:false,msg:"",loading:false},
   reducers: {
-  
+    clearStateCompany(state)
+       {
+        state.response="",
+        state.isSuccess=false,
+        state.msg=""
+       },
   },
   extraReducers:(builder)=>{
     builder.addCase(addCompany.fulfilled, (state, action) => {
       state.response="success";
-      state.data=action.payload;
+      state.data=[];
       state.loading=false;
       state.msg="Company Added !!"
+      state.isSuccess=true;
     }),
     builder.addCase(addCompany.rejected,(state,action)=>{
       state.msg="Something Went Wrong !!";
@@ -67,5 +73,5 @@ const companySlice = createSlice({
   }
 });
 
-
+export const {clearStateCompany}=companySlice.actions;
 export default companySlice.reducer;

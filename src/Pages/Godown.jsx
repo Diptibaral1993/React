@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Row, Col, FloatingLabel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { addGodown } from "../Redux/Slice/GodownSlice";
+import { addGodown, clearStateGodown } from "../Redux/Slice/GodownSlice";
 import Loader from "../Components/Loader";
 import { getCompanies } from "../Redux/Slice/companySlice";
 import Toastcomponent from "../Components/Toastcomponent";
@@ -61,6 +61,12 @@ function Godown() {
       });
     }
   };
+
+  useEffect(() => {
+    if (godown.name == "") {
+      dispatch(clearStateGodown());
+    }
+  }, [godown]);
 
   useEffect(() => {
     dispatch(getCountry());

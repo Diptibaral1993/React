@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanies } from "../../Redux/Slice/companySlice";
+import Loader from "../../Components/Loader";
 
 function CompanyList() {
   const columns = [
@@ -50,7 +51,7 @@ function CompanyList() {
   }
 
   useEffect(() => {
-    if (companydata.data.lengh != 0) {
+    if (companydata.data.length != 0) {
       companydata.data.map((item, index) => {
         setRecords(companydata.data);
       });
@@ -63,6 +64,7 @@ function CompanyList() {
 
   return (
     <>
+      {companydata.loading && <Loader />}
       {companydata.data != null && (
         <Datatable
           data={records}

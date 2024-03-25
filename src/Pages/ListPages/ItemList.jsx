@@ -1,60 +1,59 @@
-import React from "react";
-import { Table } from "react-bootstrap";
-function ItemList() {
+import React, { useEffect, useState } from "react";
+import Datatable from "../../Components/Datatable";
+import { useDispatch, useSelector } from "react-redux";
+import { getItems } from "../../Redux/Slice/itemSlice";
+import Loader from "../../Components/Loader";
+
+function itemList() {
+  const columns = [
+    {
+      name: "#",
+      selector: (row) => row.id,
+      sortable: true,
+    },
+    {
+      name: "ITEM NAME",
+      selector: (row) => row.name,
+      sortable: true,
+    },
+  ];
+
+  const itemData = useSelector((state) => state.item);
+  const dipatch = useDispatch();
+
+  const [records, setRecords] = useState([]);
+
+  function handleFilter(event) {
+    const newdata = itemData.data.filter((row) => {
+      return row.name.includes(event.target.value);
+    });
+    setRecords(newdata);
+  }
+
+  useEffect(() => {
+    if (itemData.data.length != 0) {
+      itemData.data.map((item, index) => {
+        setRecords(itemData.data);
+      });
+    }
+  }, [itemData]);
+
+  useEffect(() => {
+    dipatch(getItems());
+  }, []);
+
   return (
-    <div>
-      <Table responsive="sm">
-        <thead>
-          <tr>
-            <th></th>
-            <th>Item</th>
-            <th>ItemType</th>
-            <th>Email</th>
-            <th>ContactPerson</th>
-            <th>Phone</th>
-            <th>Country</th>
-            <th>State</th>
-            <th>City</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
-        </tbody>
-      </Table>
-    </div>
+    <>
+      {itemData.loading && <Loader />}
+      {itemData.data != null && (
+        <Datatable
+          data={records}
+          columns={columns}
+          handleFilter={handleFilter}
+        />
+      )}
+    </>
   );
 }
 
-export default ItemList;
+export default itemList;

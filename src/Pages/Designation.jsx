@@ -1,6 +1,6 @@
 import React from "react";
 import { useState } from "react";
-import { Button, Form, Col, Row, FloatingLabel } from "react-bootstrap";
+import { Button, Form, Col, Row, FloatingLabel, Table } from "react-bootstrap";
 function Designation() {
   const [designation, setDesignation] = useState({
     id: 0,
@@ -26,51 +26,76 @@ function Designation() {
   return (
     <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Row>
-        <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-          <FloatingLabel label="Department">
-            <Form.Select
-              required
-              value={designation.departmentid}
-              onChange={(e) => {
-                setDesignation({
-                  ...designation,
-                  departmentid: e.target.value,
-                });
-              }}
-            >
-              <option value="">Select Department</option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
-            </Form.Select>
-            <Form.Control.Feedback type="invalid">
-              Select Department !!
-            </Form.Control.Feedback>
-          </FloatingLabel>
-        </Form.Group>
-        <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-          <FloatingLabel label="Designation Name">
-            <Form.Control
-              required
-              placeholder="Designation Name"
-              value={designation.name}
-              onChange={(e) =>
-                setDesignation({ ...designation, name: e.target.value })
-              }
-            />
-            <Form.Control.Feedback type="invalid">
-              Enter Designation Name !!
-            </Form.Control.Feedback>
-          </FloatingLabel>
-        </Form.Group>
-      </Row>
+        <Col md={5} sm={6} xs={12}>
+          <Form.Group as={Col} md={12} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Department">
+              <Form.Select
+                required
+                value={designation.departmentid}
+                onChange={(e) => {
+                  setDesignation({
+                    ...designation,
+                    departmentid: e.target.value,
+                  });
+                }}
+              >
+                <option value="">Select Department</option>
+                <option value="1">One</option>
+                <option value="2">Two</option>
+                <option value="3">Three</option>
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Select Department !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={12} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Designation Name">
+              <Form.Control
+                required
+                placeholder="Designation Name"
+                value={designation.name}
+                onChange={(e) =>
+                  setDesignation({ ...designation, name: e.target.value })
+                }
+              />
+              <Form.Control.Feedback type="invalid">
+                Enter Designation Name !!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
 
-      <Button variant="outline-success" type="submit" className="mt-2">
-        Submit
-      </Button>
-      <Button variant="outline-danger" type="submit" className="mt-2">
-        Close
-      </Button>
+          <Button variant="outline-success" type="submit" className="mt-2">
+            Submit
+          </Button>
+          <Button variant="outline-danger" type="submit" className="mt-2">
+            Close
+          </Button>
+        </Col>
+        <Col md={7} sm={6} xs={12}>
+          <Table responsive="sm">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Department</th>
+                <th>Designation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Table cell</td>
+                <td>Table cell</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Table cell</td>
+                <td>Table cell</td>
+              </tr>
+            </tbody>
+          </Table>
+        </Col>
+      </Row>
     </Form>
   );
 }

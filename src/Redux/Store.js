@@ -4,6 +4,8 @@ import companySliceReducer from "./Slice/companySlice";
 import menuSliceReducer from "./Slice/menuSlice";
 import GodownSlice from "./Slice/GodownSlice";
 import locationSlice from "./Slice/locationSlice";
+import userSlice from "./Slice/userSlice";
+import itemSlice from "./Slice/itemSlice";
 
 
 export const store = configureStore({
@@ -11,6 +13,8 @@ export const store = configureStore({
     company: companySliceReducer,
     menu:menuSliceReducer,
     godown:GodownSlice,
-    location:locationSlice
+    location:locationSlice,
+    user:userSlice,
+    item:itemSlice
   },
 });
