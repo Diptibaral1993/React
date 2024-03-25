@@ -38,7 +38,7 @@ function Datatable(props) {
               onChange={props.handleFilter}
             />
           </Col>
-          <Col xs="auto">
+          <Col xs="auto" style={{ display: props.hidden }}>
             <Link className="btn btn-primary" role="button" to="add">
               Add +
             </Link>

@@ -75,6 +75,7 @@ function UserList() {
           data={records}
           columns={columns}
           handleFilter={handleFilter}
+          hidden="block"
         />
       )}
 

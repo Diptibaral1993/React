@@ -70,6 +70,7 @@ function CompanyList() {
           data={records}
           columns={columns}
           handleFilter={handleFilter}
+          hidden="block"
         />
       )}
     </>

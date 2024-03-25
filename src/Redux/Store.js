@@ -6,6 +6,8 @@ import GodownSlice from "./Slice/GodownSlice";
 import locationSlice from "./Slice/locationSlice";
 import userSlice from "./Slice/userSlice";
 import itemSlice from "./Slice/itemSlice";
+import departmentSlice from "./Slice/departmentSlice";
+import designationSlice from "./Slice/designationSlice";
 
 
 export const store = configureStore({
@@ -15,6 +17,8 @@ export const store = configureStore({
     godown:GodownSlice,
     location:locationSlice,
     user:userSlice,
-    item:itemSlice
+    item:itemSlice,
+    department:departmentSlice,
+    designation:designationSlice
   },
 });
