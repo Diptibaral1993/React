@@ -14,6 +14,11 @@ import {
 import { getCompanies } from "../Redux/Slice/companySlice";
 import { getGodownbyCompany } from "../Redux/Slice/GodownSlice";
 import Loader from "../Components/Loader";
+import { getDepartments } from "../Redux/Slice/departmentSlice";
+import {
+  getDesignationBydepartment,
+  getDesignations,
+} from "../Redux/Slice/designationSlice";
 
 function User() {
   const formatDate = () => {
@@ -73,6 +78,8 @@ function User() {
   const apiLocationResponse = useSelector((state) => state.location);
   const apiCompanyResponse = useSelector((state) => state.company);
   const apiGodownResponse = useSelector((state) => state.godown);
+  const apiDepartment = useSelector((state) => state.department);
+  const apiDesignation = useSelector((state) => state.designation);
 
   //handle form submit here
   const handleSubmit = (event) => {
@@ -83,6 +90,43 @@ function User() {
       setValidated(true);
     } else {
       dispatch(addUser(user));
+      setUser({
+        id: 0,
+        employeecode: "",
+        name: "",
+        username: "",
+        password: "",
+        email: "",
+        dob: "",
+        phone: "",
+        bloodgroup: "",
+        aadhar: "",
+        aadharimg: "",
+        pan: "",
+        panimg: "",
+        qualification: "",
+        doj: "",
+        dor: "",
+        experience: "",
+        country: "",
+        state: "",
+        city: "",
+        area: "",
+        pincode: "",
+        profileimg: "",
+        department: 0,
+        designation: 0,
+        bankname: "",
+        accountnumber: "",
+        ifsccode: "",
+        company: "",
+        godown: "",
+        createdby: 0,
+        createddt: formatDate(),
+        updatedby: 0,
+        updateddt: "",
+        status: 1,
+      });
     }
   };
 
@@ -103,6 +147,7 @@ function User() {
   useEffect(() => {
     dispatch(getCountry());
     dispatch(getCompanies());
+    dispatch(getDepartments());
   }, []);
   return (
     <>
@@ -570,12 +615,15 @@ function User() {
                 value={user.department}
                 onChange={(e) => {
                   setUser({ ...user, department: e.target.value });
+                  dispatch(getDesignationBydepartment(e.target.value));
                 }}
               >
                 <option value="">Select Department</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {apiDepartment.data.map((item, index) => (
+                  <option value={item.id} key={index}>
+                    {item.name}
+                  </option>
+                ))}
               </Form.Select>
               <Form.Control.Feedback type="invalid">
                 Select Department !!
@@ -592,9 +640,11 @@ function User() {
                 }}
               >
                 <option value="">Select Designation</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
+                {apiDesignation.data.map((item, index) => (
+                  <option value={item.id} key={index}>
+                    {item.name}
+                  </option>
+                ))}
               </Form.Select>
               <Form.Control.Feedback type="invalid">
                 Select Designation !!

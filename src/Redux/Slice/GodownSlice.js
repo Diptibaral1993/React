@@ -1,4 +1,4 @@
-import { faL } from "@fortawesome/free-solid-svg-icons";
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addGodown = createAsyncThunk("addgodown", async (data) => {
@@ -67,7 +67,7 @@ const godownSlice = createSlice({
         builder.addCase(getGodown.fulfilled, (state, action) => {
           state.loading = false;
           state.isSuccess=true;
-         state.data=action.payload;
+         state.data=action.payload.status=="404"?[]:action.payload;
           state.response="success";
         }),
         builder.addCase(getGodown.rejected, (state, action) => {
@@ -82,8 +82,7 @@ const godownSlice = createSlice({
         }),
           builder.addCase(getGodownbyCompany.fulfilled, (state, action) => {
             state.loading = false;
-            state.isSuccess=true;
-           state.data=action.payload;
+            state.data=action.payload.status=="404"?[]:action.payload;
             state.response="success";
           }),
           builder.addCase(getGodownbyCompany.rejected, (state, action) => {

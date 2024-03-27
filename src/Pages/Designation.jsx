@@ -85,12 +85,12 @@ function Designation() {
       setDesignation({
         id: 0,
         name: "",
-        departmentid: 0,
+        departmentid: designation.departmentid,
         createdby: 0,
         createddt: formatDate(),
         updatedby: 0,
         updateddt: "",
-        status: 0,
+        status: 1,
       });
     }
   };
@@ -122,7 +122,7 @@ function Designation() {
         <Row>
           <Col md={5} sm={6} xs={12}>
             <Form.Group as={Col} md={12} sm={6} xs={12} className="mb-3">
-              <FloatingLabel label="Country">
+              <FloatingLabel label="Department">
                 <Form.Select
                   required
                   value={designation.departmentid}

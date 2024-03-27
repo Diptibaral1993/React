@@ -8,6 +8,8 @@ import userSlice from "./Slice/userSlice";
 import itemSlice from "./Slice/itemSlice";
 import departmentSlice from "./Slice/departmentSlice";
 import designationSlice from "./Slice/designationSlice";
+import stockSlice from "./Slice/stockSlice";
+import dealerSlice from "./Slice/dealerSlice";
 
 
 export const store = configureStore({
@@ -19,6 +21,8 @@ export const store = configureStore({
     user:userSlice,
     item:itemSlice,
     department:departmentSlice,
-    designation:designationSlice
+    designation:designationSlice,
+    stock:stockSlice,
+    dealer:dealerSlice
   },
 });

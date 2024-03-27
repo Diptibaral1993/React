@@ -19,6 +19,16 @@ export const getDesignations=createAsyncThunk("getdesignations",async(data)=>{
     
 })
 
+export const getDesignationBydepartment=createAsyncThunk("getdesignationbydepartment",async(id)=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/designation/bydepartment?did="+id);
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+})
+
 const designationSlice=createSlice({
     name:"designation",
     initialState:{data:[],msg:"",response:"",isSuccess:false,loading:false},
@@ -54,6 +64,20 @@ const designationSlice=createSlice({
             state.data=action.payload.status=="404"?[]:action.payload;
         }),
         builder.addCase(getDesignations.rejected,(state,action)=>{
+            state.loading=true;
+            state.msg="Something went Wrong !!";
+            state.response="danger";
+            state.isSuccess=true;
+        }),
+        builder.addCase(getDesignationBydepartment.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(getDesignationBydepartment.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.isSuccess=false;
+            state.data=action.payload.status=="404"?[]:action.payload;
+        }),
+        builder.addCase(getDesignationBydepartment.rejected,(state,action)=>{
             state.loading=true;
             state.msg="Something went Wrong !!";
             state.response="danger";
