@@ -18,6 +18,15 @@ import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
 import DataTable, { createTheme } from "react-data-table-component";
 
+///material
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+
 function Stockallocation() {
   const formatDate = () => {
     var d = new Date(),
@@ -30,46 +39,6 @@ function Stockallocation() {
 
     return [day, month, year].join("-");
   };
-
-  const columns = [
-    {
-      name: "COMPANY",
-      selector: (row) => row.companyname,
-      sortable: true,
-    },
-    {
-      name: "GODOWN",
-      selector: (row) => row.godownname,
-      sortable: true,
-    },
-    {
-      name: "EXECUTIVE",
-      selector: (row) => row.executivename,
-      sortable: true,
-    },
-    {
-      name: "ITEM",
-      selector: (row) => row.itemname,
-      sortable: true,
-    },
-
-    {
-      name: "QNTY",
-      selector: (row) => row.quantity,
-      sortable: true,
-    },
-    {
-      name: "ACTION",
-      cell: (row) => (
-        <button
-          className="btn btn-danger"
-          onClick={(e) => handleRemove(row.id)}
-        >
-          Remove
-        </button>
-      ),
-    },
-  ];
 
   const [validated, setValidated] = useState(false);
   const [record, setRecord] = useState([]);
@@ -97,6 +66,25 @@ function Stockallocation() {
   const apiItem = useSelector((state) => state.item);
   const apiStock = useSelector((state) => state.stock);
 
+  const handleAdd = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
+    } else {
+      const stock = apiStock.data.reduce((sum, stock) => {
+        return sum + stock.quantity;
+      }, 0);
+
+      if (apiStock.data.length != 0 && stock > allocation.quantity) {
+        dispatch(addListAllocation(allocation));
+        setAllocation({ ...allocation, item: "", quantity: "" });
+        dispatch(clearStateStock());
+      }
+    }
+  };
+
   function handleExecute(event) {
     if (event.target.value != "") {
       const newdata = apiStock.alllist.filter((row) => {
@@ -109,31 +97,48 @@ function Stockallocation() {
   }
 
   function handleRemove(e) {
-    alert(e);
-    //dispatch(removeListAllocation(e.target.value));
+    //console.log(e);
+    dispatch(removeListAllocation(e));
   }
   //handle form submit here
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const form = event.currentTarget;
-    if (form.checkValidity() === false) {
-      event.stopPropagation();
-      setValidated(true);
-    } else {
-      dispatch(addAllocation(allocation));
-      setAllocation({
-        id: 0,
-        company: allocation.company,
-        godown: allocation.godown,
-        executive: allocation.executive,
-        item: "",
-        quantity: "",
-        allocationdt: formatDate(),
-        allocatedby: 1,
-        status: 1,
+    //const form = event.currentTarget;
+    // if (form.checkValidity() === false) {
+    //   event.stopPropagation();
+    //   setValidated(true);
+    // } else {
+    const itemExist = apiStock.alllist.find(
+      (x) => x.executive === allocation.executive
+    );
+    if (itemExist) {
+      apiStock.alllist.map((row) => {
+        return row.executive === allocation.executive
+          ? dispatch(
+              addAllocation({
+                id: 0,
+                company: row.company,
+                godown: row.godown,
+                executive: row.executive,
+                item: row.item,
+                quantity: row.quantity,
+                allocationdt: formatDate(),
+                allocatedby: 1,
+                status: 1,
+              })
+            ).then(() =>
+              dispatch(
+                removeListAllocation({ ex: row.executive, itm: row.item })
+              )
+            )
+          : null;
       });
+    } else {
+      alert("blank");
     }
+
+    //}
   };
 
   useEffect(() => {
@@ -170,7 +175,7 @@ function Stockallocation() {
   }, []);
   return (
     <>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Form noValidate validated={validated} onSubmit={handleAdd}>
         <Row>
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel label="Company">
@@ -271,6 +276,7 @@ function Stockallocation() {
                     ...allocation,
                     item: e.target.value,
                     itemname: e.nativeEvent.target[e.target.selectedIndex].text,
+                    quantity: 0,
                   });
                   allocation.godown != "" && e.target.value != ""
                     ? dispatch(
@@ -297,11 +303,14 @@ function Stockallocation() {
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel
               label={
-                apiStock.data.length != 0 &&
-                "Available-" +
-                  apiStock.data.reduce((sum, stock) => {
-                    return sum + stock.quantity;
-                  }, 0)
+                apiStock.data.length != 0
+                  ? "Available-" +
+                    apiStock.data.reduce((sum, stock) => {
+                      return sum + stock.quantity;
+                    }, 0)
+                  : allocation.item == ""
+                  ? ""
+                  : "Available-0"
               }
             >
               <Form.Control
@@ -319,23 +328,64 @@ function Stockallocation() {
             </FloatingLabel>
           </Form.Group>
         </Row>
+        <Button variant="outline-success" type="submit" className="mt-2">
+          Add
+        </Button>
         <Button
           variant="outline-success"
           type="button"
           className="mt-2"
-          onClick={() => dispatch(addListAllocation(allocation))}
+          onClick={handleSubmit}
         >
-          Add
-        </Button>
-        <Button variant="outline-success" type="submit" className="mt-2">
           Submit
         </Button>
         <Button variant="outline-danger" type="submit" className="mt-2">
           Close
         </Button>
       </Form>
-
-      <DataTable
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+          <TableHead>
+            <TableRow>
+              <TableCell>#</TableCell>
+              <TableCell>Company</TableCell>
+              <TableCell align="right">Godown</TableCell>
+              <TableCell align="right">Executive</TableCell>
+              <TableCell align="right">Item</TableCell>
+              <TableCell align="right">Quantity</TableCell>
+              <TableCell align="right">Action</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {record.map((row, index) => (
+              <TableRow
+                key={index}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell>{index + 1}</TableCell>
+                <TableCell component="th" scope="row">
+                  {row.companyname}
+                </TableCell>
+                <TableCell align="right">{row.godownname}</TableCell>
+                <TableCell align="right">{row.executivename}</TableCell>
+                <TableCell align="right">{row.itemname}</TableCell>
+                <TableCell align="right">{row.quantity}</TableCell>
+                <TableCell align="right">
+                  <Button
+                    className="btn btn-danger"
+                    onClick={(e) =>
+                      handleRemove({ ex: row.executive, itm: row.item })
+                    }
+                  >
+                    -
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {/* <DataTable
         columns={columns}
         data={record}
         // fixedHeader
@@ -346,7 +396,7 @@ function Stockallocation() {
             <Col xs="auto"></Col>
           </Row>
         }
-      ></DataTable>
+      ></DataTable> */}
 
       {apiCompany.loading && <Loader />}
       {apiGodown.loading && <Loader />}
@@ -357,6 +407,15 @@ function Stockallocation() {
           color={apiStock.response}
           msg={apiStock.msg}
           header="Item"
+        />
+      )}
+      {apiStock.data.reduce((sum, stock) => {
+        return sum + stock.quantity;
+      }, 0) < allocation.quantity && (
+        <Toastcomponent
+          color="danger"
+          msg="Insufficient Stock"
+          header="Stock"
         />
       )}
     </>

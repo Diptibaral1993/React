@@ -66,14 +66,20 @@ const stockSlice=createSlice({
             const itemExist=state.alllist.find((x)=>x.executive===item.executive && x.item===item.item);
             if(!itemExist)
             {
+                
                 state.alllist=[...state.alllist,item];
                 localStorage.setItem("listallocation",JSON.stringify(state.alllist));
             }
         },
         removeListAllocation(state,action){
-            state.alllist=state.alllist.filter((row)=>{
-                return row.includes(action.payload);
-            })
+            state.alllist=state.alllist.filter((row) => {
+                return (
+                  row.executive.includes(action.payload.ex) &&
+                  row.item.includes(action.payload.itm) ?null:row
+                  
+                );
+              })
+            localStorage.setItem("listallocation",JSON.stringify(state.alllist));
         },
         resetListAllocation(state,action){
             localStorage.setItem("listallocation",[]);
