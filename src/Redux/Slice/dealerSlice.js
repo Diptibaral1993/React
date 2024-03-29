@@ -18,6 +18,11 @@ export const getDealer=createAsyncThunk("getdealer",async(data)=>{
     return response.json();
 })
 
+export const getDealerByExecutive=createAsyncThunk("getdealerbyexecutive",async(id)=>{
+    const response=await fetch("https://dn.deeds.services/dealer/bysalesperson?id="+id);
+    return response.json();
+})
+
 const dealerSlice=createSlice({
     name:"dealer",
     initialState:{data:[],msg:"",response:"",isSuccess:false,loading:false},
@@ -51,6 +56,18 @@ const dealerSlice=createSlice({
             state.data=action.payload.status=="404"?[]:action.payload;
         }),
         builder.addCase(getDealer.rejected,(state,action)=>{
+            state.loading=false;
+            state.response="danger";
+            state.msg="Something Went Wrong";
+        }),
+        builder.addCase(getDealerByExecutive.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(getDealerByExecutive.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.data=action.payload.status=="404"?[]:action.payload;
+        }),
+        builder.addCase(getDealerByExecutive.rejected,(state,action)=>{
             state.loading=false;
             state.response="danger";
             state.msg="Something Went Wrong";

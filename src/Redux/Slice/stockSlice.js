@@ -27,6 +27,19 @@ export const addAllocation=createAsyncThunk("addallocation",async(data)=>{
     }
 });
 
+export const addDistribution=createAsyncThunk("adddistribution",async(data)=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/stock/distribution",{
+            method:"POST",
+            headers:{Accept:"application/json","Content-Type":"application/json"},
+            body:JSON.stringify(data)
+        });
+        return response.json();
+    } catch (error) {
+        
+    }
+});
+
 
 export const getStock=createAsyncThunk("getstock",async(data)=>{
     try {
@@ -48,11 +61,23 @@ export const getStockBygni=createAsyncThunk("getstockbygni",async(data)=>{
     
 });
 
+export const getStockByExecutive=createAsyncThunk("getstockbyexecutive",async(data)=>{
+    try {
+        
+        const response=await fetch("https://dn.deeds.services/stock/stockbyexecutive?id="+data.id+"&itmid="+data.itmid);
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+});
+
 const listallocation=localStorage.getItem("listallocation")?JSON.parse(localStorage.getItem("listallocation")):[];
+const listdistribution=localStorage.getItem("listdistribution")?JSON.parse(localStorage.getItem("listdistribution")):[];
 
 const stockSlice=createSlice({
     name:"stock",
-    initialState:{data:[],loading:false,response:"",msg:"",isSuccess:false,quantity:0,alllist:listallocation},
+    initialState:{data:[],loading:false,response:"",msg:"",isSuccess:false,quantity:0,alllist:listallocation,distlist:listdistribution},
     reducers:{
         clearStateStock(state){
             state.isSuccess=false;
@@ -84,6 +109,33 @@ const stockSlice=createSlice({
         resetListAllocation(state,action){
             localStorage.setItem("listallocation",[]);
             state.alllist=[];
+        },
+
+        addDistAllocation(state,action){
+          
+            const item=action.payload;
+            const itemExist=state.distlist.find((x)=>x.executive===item.executive && x.item===item.item);
+            console.log(action.payload);
+            if(!itemExist)
+            {
+                
+                state.distlist=[...state.distlist,item];
+                localStorage.setItem("listdistribution",JSON.stringify(state.distlist));
+            }
+        },
+        removeDistAllocation(state,action){
+            state.distlist=state.distlist.filter((row) => {
+                return (
+                  row.executive.includes(action.payload.ex) &&
+                  row.item.includes(action.payload.itm) ?null:row
+                  
+                );
+              })
+            localStorage.setItem("listdistribution",JSON.stringify(state.distlist));
+        },
+        resetDistAllocation(state,action){
+            localStorage.setItem("listdistribution",[]);
+            state.distlist=[];
         }
         
     },
@@ -125,14 +177,34 @@ const stockSlice=createSlice({
             state.isSuccess=true;
             
         }),
+
+        builder.addCase(addDistribution.pending,(state, action)=>{
+            state.loading=true;
+            
+        }),
+        builder.addCase(addDistribution.fulfilled,(state, action)=>{
+            state.loading=false;
+            state.response="success";
+            state.msg="Added Successfully !!";
+            state.isSuccess=true;
+           
+            
+        }),
+        builder.addCase(addDistribution.rejected,(state, action)=>{
+            state.loading=false;
+            state.response="danger",
+            state.msg="Something Went Wrong !!";
+            state.isSuccess=true;
+            
+        }),
+
         builder.addCase(getStock.pending,(state, action)=>{
             state.loading=true;
             
         }),
         builder.addCase(getStock.fulfilled,(state, action)=>{
             state.loading=false;
-            state.response="success";
-            state.msg="Added Successfully !!";
+
             state.data=action.payload.status=="404"?[]:action.payload;
             
         }),
@@ -149,8 +221,7 @@ const stockSlice=createSlice({
         }),
         builder.addCase(getStockBygni.fulfilled,(state, action)=>{
             state.loading=false;
-            state.response="success";
-            state.msg="Added Successfully !!";
+
             state.data=action.payload.status=="404"?[]:action.payload;
             
             
@@ -161,9 +232,27 @@ const stockSlice=createSlice({
             state.response="danger",
             state.msg="Something Went Wrong !!";
             
+        }),
+        builder.addCase(getStockByExecutive.pending,(state, action)=>{
+            state.loading=true;
+            
+        }),
+        builder.addCase(getStockByExecutive.fulfilled,(state, action)=>{
+            state.loading=false;
+   
+            state.data=action.payload.status=="404"?[]:action.payload;
+            
+            
+        }),
+        builder.addCase(getStockByExecutive.rejected,(state, action)=>{
+            state.loading=false;
+            state.isSuccess=true;
+            state.response="danger",
+            state.msg="Something Went Wrong !!";
+            
         })
     }
 });
 
-export const {clearStateStock,addListAllocation,resetListAllocation,removeListAllocation}=stockSlice.actions;
+export const {clearStateStock,addListAllocation,resetListAllocation,removeListAllocation,addDistAllocation,removeDistAllocation,resetDistAllocation}=stockSlice.actions;
 export default stockSlice.reducer;

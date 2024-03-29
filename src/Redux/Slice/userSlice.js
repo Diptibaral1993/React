@@ -42,10 +42,19 @@ export const getSEbyGodown=createAsyncThunk("getsebygodown",async(id)=>{
     }
 })
 
+export const getAllSE=createAsyncThunk("getallse",async()=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/user/allexecutive");
+        return response.json();
+    } catch (error) {
+        
+    }
+})
+
 
 const userSlice=createSlice({
     name:"user",
-    initialState:{data:[],response:"",msg:"",loading:false,isSuccess:false},
+    initialState:{data:[],executive:[],response:"",msg:"",loading:false,isSuccess:false},
     reducers:{
         clearStateUser(state)
        {
@@ -112,6 +121,21 @@ const userSlice=createSlice({
 
         }),
         builder.addCase(getSEbyGodown.rejected,(state,action)=>{
+            state.loading=false;
+            state.isSuccess=false;
+            state.msg="Something Went Wrong";
+            state.response="danger";
+        }),
+        builder.addCase(getAllSE.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(getAllSE.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.isSuccess=true;
+            state.executive=action.payload;
+
+        }),
+        builder.addCase(getAllSE.rejected,(state,action)=>{
             state.loading=false;
             state.isSuccess=false;
             state.msg="Something Went Wrong";

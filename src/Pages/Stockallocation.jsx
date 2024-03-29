@@ -328,7 +328,7 @@ function Stockallocation() {
             </FloatingLabel>
           </Form.Group>
         </Row>
-        <Button variant="outline-success" type="submit" className="mt-2">
+        <Button variant="outline-success" type="submit" className="mt-2 ">
           Add
         </Button>
         <Button
@@ -343,17 +343,27 @@ function Stockallocation() {
           Close
         </Button>
       </Form>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} className="mt-3">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
+          <TableHead style={{ backgroundColor: "gray" }}>
             <TableRow>
-              <TableCell>#</TableCell>
-              <TableCell>Company</TableCell>
-              <TableCell align="right">Godown</TableCell>
-              <TableCell align="right">Executive</TableCell>
-              <TableCell align="right">Item</TableCell>
-              <TableCell align="right">Quantity</TableCell>
-              <TableCell align="right">Action</TableCell>
+              <TableCell style={{ color: "white" }}>#</TableCell>
+              <TableCell style={{ color: "white" }}>Company</TableCell>
+              <TableCell align="right" style={{ color: "white" }}>
+                Godown
+              </TableCell>
+              <TableCell align="right" style={{ color: "white" }}>
+                Executive
+              </TableCell>
+              <TableCell align="right" style={{ color: "white" }}>
+                Item
+              </TableCell>
+              <TableCell align="right" style={{ color: "white" }}>
+                Quantity
+              </TableCell>
+              <TableCell align="right" style={{ color: "white" }}>
+                Action
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
