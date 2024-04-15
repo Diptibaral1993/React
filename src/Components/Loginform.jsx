@@ -1,100 +1,115 @@
-import React, { useEffect, useState } from "react";
-import { FaEnvelope, FaLock } from "react-icons/fa";
-import "../assets/Style/Login.css";
-import { useNavigate } from "react-router-dom";
-
+import React from "react";
+import { useState, useEffect } from "react";
+import {
+  Button,
+  Form,
+  Row,
+  Col,
+  Container,
+  Card,
+  FloatingLabel,
+  CardBody,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { clearStateLogin, getLogin } from "../Redux/Slice/loginSlice";
+import { useDispatch, useSelector } from "react-redux";
+import Toastcomponent from "../Components/Toastcomponent";
+import Loader from "../Components/Loader";
 function Loginform() {
   const [credentials, setCredentials] = useState({
-    userName: "",
-    passWord: "",
+    uname: "",
+    pass: "",
   });
-
-  const [errorMessage, setErrorMessage] = useState({
-    erruserName: "false",
-    errpassWord: "false",
-  });
-
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [validated, setValidated] = useState(false);
+  const apiResponseUserinfo = useSelector((state) => state.userinfo);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (credentials.userName == "" && credentials.passWord == "") {
-      setErrorMessage({
-        ...errorMessage,
-        erruserName: "true",
-        errpassWord: "true",
-      });
-    } else if (credentials.userName != "" && credentials.passWord == "") {
-      setErrorMessage({
-        ...errorMessage,
-        erruserName: "false",
-        errpassWord: "true",
-      });
-    } else if (credentials.userName == "" && credentials.passWord != "") {
-      setErrorMessage({
-        ...errorMessage,
-        erruserName: "true",
-        errpassWord: "false",
-      });
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+      setValidated(true);
     } else {
-      navigate("/");
+      dispatch(getLogin(credentials));
     }
   };
 
+  useEffect(() => {
+    if (apiResponseUserinfo.isSuccess) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+  }, [apiResponseUserinfo]);
   return (
-    <form id="loginform">
-      <div className="inputWithIcon inputIconBg">
-        <input
-          type="text"
-          placeholder="Username"
-          value={credentials.userName}
-          onChange={(e) => {
-            setCredentials({ ...credentials, userName: e.target.value }),
-              setErrorMessage({
-                ...errorMessage,
-                erruserName: e.target.value == "" ? "true" : "false",
-              });
-          }}
-          style={{
-            border: errorMessage.erruserName == "true" ? "2px solid red" : "",
-          }}
-        />
-        <i>{<FaEnvelope />}</i>
-      </div>
-      <div className="inputWithIcon inputIconBg">
-        <input
-          type="text"
-          placeholder="Password"
-          value={credentials.passWord}
-          onChange={(e) => {
-            setCredentials({ ...credentials, passWord: e.target.value }),
-              setErrorMessage({
-                ...errorMessage,
-                errpassWord: e.target.value == "" ? "true" : "false",
-              });
-          }}
-          style={{
-            border: errorMessage.errpassWord == "true" ? "2px solid red" : "",
-          }}
-        />
-        <i>{<FaLock />}</i>
-      </div>
-
-      <button
-        type="submit"
-        className="btn btn-primary btnsumbit"
-        onClick={(e) => handleSubmit(e)}
-      >
-        Login
-      </button>
-
-      <div className="divider">Or You Can</div>
-
-      <button type="submit" className="btn btn-primary">
-        Register User
-      </button>
-    </form>
+    <>
+      <Container>
+        <Row className="d-flex justify-content-center">
+          <Col xs={12} md={4}>
+            <Card>
+              <CardBody>
+                <h1>Sign In</h1>
+                <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel label="User Name">
+                      <Form.Control
+                        required
+                        placeholder="User Name"
+                        value={credentials.uname}
+                        onChange={(e) => {
+                          setCredentials({
+                            ...credentials,
+                            uname: e.target.value,
+                          });
+                        }}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Enter User Name !!
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Form.Group className="mb-3">
+                    <FloatingLabel label="Password">
+                      <Form.Control
+                        type="password"
+                        required
+                        placeholder="Password"
+                        value={credentials.pass}
+                        onChange={(e) => {
+                          setCredentials({
+                            ...credentials,
+                            pass: e.target.value,
+                          });
+                        }}
+                      />
+                      <Form.Control.Feedback type="invalid">
+                        Enter Password !!
+                      </Form.Control.Feedback>
+                    </FloatingLabel>
+                  </Form.Group>
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    className="text-center justify-content-center align-items-center mt-4 pt-2"
+                  >
+                    Sign In
+                  </Button>
+                </Form>
+                <Row className="py-3">
+                  <Col>
+                    New User ? <Link>Register</Link>
+                  </Col>
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+      {apiResponseUserinfo.loading && <Loader />}
+    </>
   );
 }
 

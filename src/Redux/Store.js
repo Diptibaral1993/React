@@ -10,6 +10,7 @@ import departmentSlice from "./Slice/departmentSlice";
 import designationSlice from "./Slice/designationSlice";
 import stockSlice from "./Slice/stockSlice";
 import dealerSlice from "./Slice/dealerSlice";
+import loginSlice from "./Slice/loginSlice";
 
 
 export const store = configureStore({
@@ -23,6 +24,7 @@ export const store = configureStore({
     department:departmentSlice,
     designation:designationSlice,
     stock:stockSlice,
-    dealer:dealerSlice
+    dealer:dealerSlice,
+    userinfo:loginSlice
   },
 });

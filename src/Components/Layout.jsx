@@ -5,24 +5,35 @@ import Navbar from "react-bootstrap/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import Card from "react-bootstrap/Card";
-import { Outlet } from "react-router-dom";
+import { Outlet, redirect } from "react-router-dom";
 import { getMenus } from "../Redux/Slice/menuSlice";
 import { Link } from "react-router-dom";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import { FaBabyCarriage } from "react-icons/fa";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FaBabyCarriage, FaPowerOff } from "react-icons/fa";
+import { clearStateLogin } from "../Redux/Slice/loginSlice";
 
 function Layout() {
   const [routingHeader, setRoutingHeader] = useState("Dashboard");
   const dispatch = useDispatch();
   const menulist = useSelector((state) => state.menu);
+  const navigate = useNavigate();
+
+  const apiResponseUserinfo = useSelector((state) => state.userinfo);
 
   const handleMenu = () => {
     dispatch(getMenus());
   };
 
   useEffect(() => {
-    handleMenu();
+    const getstate = localStorage.getItem("userinfo");
+
+    if (apiResponseUserinfo.userinfo == null) {
+      navigate("/login");
+    } else {
+      handleMenu();
+    }
   }, []);
   return (
     <>
@@ -36,25 +47,38 @@ function Layout() {
           fluid
           style={{ backgroundColor: "cornflowerblue", padding: "10px" }}
         >
-          <Row>
-            <Col xs={4} sm={4} md={4}>
-              <Navbar.Toggle
-                className="bg-light"
-                aria-controls="offcanvasNavbar-expand-false"
-              />
-            </Col>
-            <Col xs={8} sm={8} md={8}>
-              <Navbar.Brand
-                style={{
-                  color: "white",
-                  fontWeight: "bolder",
-                  fontSize: "xx-large",
-                }}
-              >
-                Dn-Peripherial
-              </Navbar.Brand>
-            </Col>
-          </Row>
+          <Col xs={1} sm={1} md={1}>
+            <Navbar.Toggle
+              className="bg-light"
+              aria-controls="offcanvasNavbar-expand-false"
+            />
+          </Col>
+          <Col xs={10} sm={10} md={10}>
+            <Navbar.Brand
+              style={{
+                color: "white",
+                fontWeight: "bolder",
+                fontSize: "xx-large",
+              }}
+            >
+              Dn-Peripherial
+            </Navbar.Brand>
+          </Col>
+          <Col
+            xs={1}
+            sm={1}
+            md={1}
+            style={{
+              color: "white",
+              fontSize: "30px",
+              cursor: "pointer",
+              textAlign: "center",
+            }}
+          >
+            <a href="/login">
+              <FaPowerOff />
+            </a>
+          </Col>
 
           <Navbar.Offcanvas
             animation="false"
