@@ -19,6 +19,7 @@ const loginSlice = createSlice ({
                 state.msg = ""
                 state.userinfo=[];
                 localStorage.setItem('userinfo',[]);
+                localStorage.setItem('headertext',"");
         },
     }, 
     extraReducers: (builder) => {

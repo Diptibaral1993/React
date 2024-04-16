@@ -113,13 +113,6 @@ function Layout() {
                       fontWeight: "bold",
                     }}
                   >
-                    {/* <FaBabyCarriage
-                      size="25px"
-                      style={{
-                        marginLeft: "20px",
-                        marginRight: "10px",
-                      }}
-                    /> */}
                     <img src={item.icon} />
                     {item.menuname}
                   </Nav.Link>
