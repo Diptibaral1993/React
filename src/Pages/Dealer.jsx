@@ -15,6 +15,7 @@ import { getCompanies } from "../Redux/Slice/companySlice";
 import { addDealer } from "../Redux/Slice/dealerSlice";
 import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
+import { useNavigate } from "react-router-dom";
 
 function Dealer() {
   const [validated, setValidated] = useState(false);
@@ -36,6 +37,8 @@ function Dealer() {
 
     return [day, month, year].join("-");
   };
+
+  const navigate = useNavigate();
 
   const [dealer, setDealer] = useState({
     id: 0,
@@ -330,10 +333,15 @@ function Dealer() {
         </Row>
         <Button variant="outline-success" type="submit" className="mt-2">
           Submit
-        </Button>
-        <Button variant="outline-danger" type="submit" className="mt-2">
+        </Button>{" "}
+        <Button
+          variant="outline-danger"
+          type="button"
+          className="mt-2"
+          onClick={() => navigate("/dealer")}
+        >
           Close
-        </Button>
+        </Button>{" "}
       </Form>
       {apiResponse.loading && <Loader />}
       {apiResponse.response != "" && (

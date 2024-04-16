@@ -8,6 +8,7 @@ import { getItems } from "../Redux/Slice/itemSlice";
 import { addStock, clearStateStock } from "../Redux/Slice/stockSlice";
 import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
+import { useNavigate } from "react-router-dom";
 
 function Stock() {
   const [validated, setValidated] = useState(false);
@@ -16,6 +17,7 @@ function Stock() {
   const apiItem = useSelector((state) => state.item);
   const apiResponse = useSelector((state) => state.stock);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [stock, setStock] = useState({
     id: 0,
@@ -146,8 +148,13 @@ function Stock() {
         </Row>
         <Button variant="outline-success" type="submit" className="mt-2">
           Submit
-        </Button>
-        <Button variant="outline-danger" type="submit" className="mt-2">
+        </Button>{" "}
+        <Button
+          variant="outline-danger"
+          type="submit"
+          className="mt-2"
+          onClick={() => navigate("/stock")}
+        >
           Close
         </Button>
       </Form>

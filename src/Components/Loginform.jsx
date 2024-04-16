@@ -41,6 +41,7 @@ function Loginform() {
 
   useEffect(() => {
     if (apiResponseUserinfo.isSuccess) {
+      localStorage.setItem("headertext", "DASHBOARD");
       navigate("/");
     } else {
       navigate("/login");

@@ -19,6 +19,7 @@ import {
   getDesignationBydepartment,
   getDesignations,
 } from "../Redux/Slice/designationSlice";
+import { useNavigate } from "react-router-dom";
 
 function User() {
   const formatDate = () => {
@@ -32,7 +33,7 @@ function User() {
 
     return [day, month, year].join("-");
   };
-
+  const navigate = useNavigate();
   const [user, setUser] = useState({
     id: 0,
     employeecode: "",
@@ -742,8 +743,14 @@ function User() {
         </Row>
         <Button variant="outline-success" type="submit">
           Submit
+        </Button>{" "}
+        <Button
+          variant="outline-danger"
+          type="button"
+          onClick={() => navigate("/user")}
+        >
+          Close
         </Button>
-        <Button variant="outline-danger">Close</Button>
       </Form>
       {(apiResponse.loading && <Loader />) ||
         (apiLocationResponse.loading && <Loader />) ||

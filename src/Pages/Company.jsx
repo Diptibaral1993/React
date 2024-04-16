@@ -15,6 +15,7 @@ import Button from "react-bootstrap/Button";
 import { addCompany, clearStateCompany } from "../Redux/Slice/companySlice";
 import Toastcomponent from "../Components/Toastcomponent.jsx";
 import Loader from "../Components/Loader.jsx";
+import { useNavigate } from "react-router-dom";
 
 function Company() {
   const [company, setCompany] = useState({
@@ -32,6 +33,8 @@ function Company() {
     pincode: "",
     status: 1,
   });
+
+  const navigate = useNavigate();
 
   const [validated, setValidated] = useState(false);
 
@@ -284,6 +287,13 @@ function Company() {
         </Row>
         <Button variant="outline-success" type="submit">
           Submit
+        </Button>{" "}
+        <Button
+          variant="outline-danger"
+          type="button"
+          onClick={() => navigate("/company")}
+        >
+          Close
         </Button>{" "}
       </Form>
       {apiResponse.loading && <Loader />}

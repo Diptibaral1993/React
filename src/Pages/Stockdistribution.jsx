@@ -22,6 +22,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { useNavigate } from "react-router-dom";
 
 function Stockdistribution() {
   const formatDate = () => {
@@ -35,7 +36,7 @@ function Stockdistribution() {
 
     return [day, month, year].join("-");
   };
-
+  const navigate = useNavigate();
   const [validated, setValidated] = useState(false);
   const [record, setRecord] = useState([]);
   const [distribution, setDistribution] = useState({
@@ -263,7 +264,7 @@ function Stockdistribution() {
         </Row>
         <Button variant="outline-success" type="submit" className="mt-2">
           Add
-        </Button>
+        </Button>{" "}
         <Button
           variant="outline-success"
           type="button"
@@ -271,8 +272,13 @@ function Stockdistribution() {
           onClick={handleSubmit}
         >
           Submit
-        </Button>
-        <Button variant="outline-danger" type="submit" className="mt-2">
+        </Button>{" "}
+        <Button
+          variant="outline-danger"
+          type="button"
+          className="mt-2"
+          onClick={() => navigate("/stock")}
+        >
           Close
         </Button>
       </Form>

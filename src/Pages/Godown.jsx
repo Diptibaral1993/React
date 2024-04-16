@@ -12,6 +12,7 @@ import {
   getState,
   getPincode,
 } from "../Redux/Slice/locationSlice";
+import { useNavigate } from "react-router-dom";
 function Godown() {
   const [godown, setGodown] = useState({
     id: 0,
@@ -29,6 +30,7 @@ function Godown() {
   });
 
   const [validated, setValidated] = useState(false);
+  const navigate = useNavigate();
 
   const apiResponse = useSelector((state) => state.godown);
   const apiLocationResponse = useSelector((state) => state.location);
@@ -270,6 +272,13 @@ function Godown() {
         </Row>
         <Button variant="outline-success" type="submit">
           Submit
+        </Button>{" "}
+        <Button
+          variant="outline-danger"
+          type="button"
+          onClick={() => navigate("/godown")}
+        >
+          Close
         </Button>{" "}
       </Form>
       {apiResponse.loading && <Loader />}

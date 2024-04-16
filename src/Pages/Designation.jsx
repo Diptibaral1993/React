@@ -163,9 +163,6 @@ function Designation() {
             <Button variant="outline-success" type="submit" className="mt-2">
               Submit
             </Button>
-            <Button variant="outline-danger" type="submit" className="mt-2">
-              Close
-            </Button>
           </Col>
           <Col
             md={7}

@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItem, clearStateItem } from "../Redux/Slice/itemSlice";
 import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
+import { useNavigate } from "react-router-dom";
 
 function Item() {
   const [validated, setValidated] = useState(false);
 
   const apiResponse = useSelector((state) => state.item);
+  const navigate = useNavigate();
 
   const formatDate = () => {
     var d = new Date(),
@@ -69,8 +71,13 @@ function Item() {
         </Row>
         <Button variant="outline-success" type="submit" className="mt-2">
           Submit
-        </Button>
-        <Button variant="outline-danger" type="submit" className="mt-2">
+        </Button>{" "}
+        <Button
+          variant="outline-danger"
+          type="submit"
+          className="mt-2"
+          onClick={() => navigate("/item")}
+        >
           Close
         </Button>
       </Form>

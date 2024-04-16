@@ -74,9 +74,9 @@ function layout1() {
       navigate("/login");
     } else {
       handleMenu();
-      localStorage.setItem("headertext", "DASHBOARD");
     }
   }, []);
+
   return (
     <>
       <IconContext.Provider value={{ color: "#FFF" }}>
