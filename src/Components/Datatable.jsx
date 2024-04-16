@@ -12,7 +12,7 @@ const customStyle = {
   },
   headCells: {
     style: {
-      fontSize: "16px",
+      fontSize: "10px",
       fontWeight: "600",
       textTransform: "uppercase",
     },
@@ -38,7 +38,10 @@ function Datatable(props) {
               onChange={props.handleFilter}
             />
           </Col>
-          <Col xs="auto" style={{ display: props.hidden }}>
+          <Col
+            xs="auto"
+            style={{ display: props.hidden, paddingLeft: "0.1rem" }}
+          >
             <Link className="btn btn-primary" role="button" to="add">
               Add +
             </Link>
