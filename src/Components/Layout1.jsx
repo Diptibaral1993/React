@@ -97,9 +97,10 @@ function layout1() {
             sm={1}
             md={1}
             style={{
-              fontSize: "30px",
+              fontSize: "1.6rem",
               cursor: "pointer",
               textAlign: "center",
+              marginLeft: "-1rem",
             }}
           >
             <a href="/login">
@@ -114,7 +115,7 @@ function layout1() {
           <ul className="nav-menu-items">
             <li className="navbar-toggle">
               <Link to="#" className="menu-bars">
-                <AiIcons.AiOutlineClose />
+                <AiIcons.AiOutlineClose onClick={showSidebar} />
               </Link>
             </li>
             {menulist?.menus?.map((item) => (
@@ -139,7 +140,7 @@ function layout1() {
             </li> */}
           </ul>
         </nav>
-        <Card className="text-center" style={{ margin: "1em" }}>
+        <Card className="text-center cust_card">
           <Card.Header
             style={{
               backgroundColor: "#7cc3ccdb",

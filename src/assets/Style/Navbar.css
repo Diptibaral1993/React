@@ -11,8 +11,8 @@
   }
   
   .menu-bars {
-    margin-left: 2rem;
-    font-size: 2rem;
+    margin-left: 1rem;
+    font-size: 1.5rem;
     background: none;
   }
   
@@ -54,12 +54,20 @@
       
     
       font-weight: bold;
-      font-size: 30px !important;
+      font-size: 1.5rem !important;
       
       /* Gradient Text */
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+
+    .cust_card{
+      margin: 0.3em !important;;
+    }
+  }
+
+  .cust_card{
+    margin:1em;
   }
   
   .nav-text {
@@ -111,7 +119,7 @@
     
   
     font-weight: bold;
-    font-size: 44px;
+    font-size: 38px;
     
     /* Gradient Text */
     -webkit-background-clip: text;
