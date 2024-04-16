@@ -146,7 +146,7 @@ function layout1() {
               backgroundColor: "#7cc3ccdb",
               color: "white",
               fontWeight: "bolder",
-              fontSize: "x-large",
+              fontSize: "1.2rem",
             }}
           >
             {localStorage.getItem("headertext")}

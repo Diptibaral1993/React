@@ -4,10 +4,11 @@
   
   .navbar {
     background-color: var(--navBg);
-    height: 80px;
+    height: 50px;
     display: flex;
     justify-content: start;
-    align-items: center;
+    align-items: initial;
+    
   }
   
   .menu-bars {
@@ -119,10 +120,11 @@
     
   
     font-weight: bold;
-    font-size: 38px;
+    font-size: 25px;
     
     /* Gradient Text */
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    
   }
   

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const customStyle = {
   headRow: {
     style: {
-      backgroundColor: "grey",
+      backgroundColor: "#7ba6de",
       color: "white",
     },
   },
