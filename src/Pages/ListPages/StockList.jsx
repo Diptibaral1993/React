@@ -3,6 +3,8 @@ import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
 import { getStock } from "../../Redux/Slice/stockSlice";
 import Loader from "../../Components/Loader";
+import { CiEdit } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
 
 function StockList() {
   const columns = [
@@ -31,6 +33,26 @@ function StockList() {
       selector: (row) => row.quantity,
       sortable: true,
     },
+    {
+      name: "ACTION",
+      cell: (row) => (
+        <>
+          <span>
+            <CiEdit
+              style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+          <span>
+            <MdDelete
+              style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+        </>
+      ),
+      sortable: true,
+    },
   ];
 
   const stockData = useSelector((state) => state.stock);
@@ -44,7 +66,7 @@ function StockList() {
         row.companyName.includes(event.target.value) ||
         row.godownName.includes(event.target.value) ||
         row.itemName.includes(event.target.value) ||
-        row.quantity.includes(event.target.value) 
+        row.quantity.includes(event.target.value)
       );
     });
     setRecords(newdata);
@@ -52,7 +74,7 @@ function StockList() {
 
   useEffect(() => {
     if (stockData.data.length != 0) {
-        stockData.data.map((item, index) => {
+      stockData.data.map((item, index) => {
         setRecords(stockData.data);
       });
     }

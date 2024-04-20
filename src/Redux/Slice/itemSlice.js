@@ -2,7 +2,7 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addItem=createAsyncThunk("additem",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/item",{
+        const response=await fetch("http://dn.deeds.services/api/item",{
             method:"POST",
             headers:{
                 Accept: "application/json",
@@ -17,9 +17,45 @@ export const addItem=createAsyncThunk("additem",async(data)=>{
     }
 });
 
+export const updateItem=createAsyncThunk("updateitem",async(data)=>{
+    try {
+        const response=await fetch("http://dn.deeds.services/api/Item?id="+data.id,{
+            method:"PUT",
+            headers:{
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify(data),
+        });
+
+        return response.json();
+    } catch (error) {
+        
+    }
+});
+
+export const activeInactiveItem=createAsyncThunk("activeinactiveitem",async(id)=>{
+    try {
+        const response=await fetch("http://dn.deeds.services/item/activeinactive?id="+id);
+        return response.json();
+    } catch (error) {
+        
+    }
+});
+
 export const getItems=createAsyncThunk("getitems",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/Item");
+        const response=await fetch("http://dn.deeds.services/api/Item");
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+});
+
+export const getItembyid=createAsyncThunk("getitembyid",async(id)=>{
+    try {
+        const response=await fetch("http://dn.deeds.services/item/byid?id="+id);
         return response.json();
     } catch (error) {
         
@@ -29,12 +65,14 @@ export const getItems=createAsyncThunk("getitems",async(data)=>{
 
 const itemSlice=createSlice({
     name:"item",
-    initialState:{data:[], loading: false, msg: null,response:"",isSuccess:false },
+    initialState:{data:[],editdata:[], loading: false, msg: null,response:"",isSuccess:false },
     reducers:{
         clearStateItem(state){
             state.msg="";
             state.response="";
             state.isSuccess=false;
+            editdata=[];
+           
         },
     },
     extraReducers:(builder)=>{
@@ -42,17 +80,57 @@ const itemSlice=createSlice({
             state.loading=true;
         }),
         builder.addCase(addItem.fulfilled,(state,action)=>{
+            
+            if(action.payload.status!="404")
+            {
+                state.response="success",
+                state.msg="Added Succesfully !!",
+                state.isSuccess=true;
+            }
             state.loading=false;
-            state.data=[],
-            state.response="success",
-            state.msg="Added Succesfully !!",
-            state.isSuccess=true;
         }),
         builder.addCase(addItem.rejected,(state,action)=>{
             state.loading=false;
             state.data=[],
             state.response="danger",
-            state.msg="ASOmething Went Wrong !!",
+            state.msg="Something Went Wrong !!",
+            state.isSuccess=false;
+        }),
+        builder.addCase(updateItem.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(updateItem.fulfilled,(state,action)=>{
+            
+            if(action.payload.status!="404")
+            {
+                state.response="success",
+                state.msg="Updated Succesfully !!",
+                state.isSuccess=true;
+            }
+            state.loading=false;
+        }),
+        builder.addCase(updateItem.rejected,(state,action)=>{
+            state.loading=false;
+            state.data=[],
+            state.response="danger",
+            state.msg="Something Went Wrong !!",
+            state.isSuccess=false;
+        }),
+        builder.addCase(activeInactiveItem.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(activeInactiveItem.fulfilled,(state,action)=>{
+            
+            state.loading=false;
+            state.response="success",
+            state.msg="Updated Successfully !!",
+            state.isSuccess=true;
+            
+        }),
+        builder.addCase(activeInactiveItem.rejected,(state,action)=>{
+            state.loading=false;
+            state.response="danger",
+            state.msg="Something Went Wrong !!",
             state.isSuccess=false;
         }),
         builder.addCase(getItems.pending,(state,action)=>{
@@ -60,14 +138,28 @@ const itemSlice=createSlice({
         }),
         builder.addCase(getItems.fulfilled,(state,action)=>{
             state.loading=false;
-            state.data=action.payload,
-            state.response="success",
-            state.msg="",
-            state.isSuccess=true;
+            state.data=action.payload.status!="404"?action.payload:[];
+            state.isSuccess=false;
+           
         }),
         builder.addCase(getItems.rejected,(state,action)=>{
             state.loading=false;
             state.data=[],
+            state.response="danger",
+            state.msg="Something Went Wrong !!",
+            state.isSuccess=false;
+        }),
+        builder.addCase(getItembyid.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(getItembyid.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.editdata=action.payload.status!="404"?action.payload:[];
+           
+        }),
+        builder.addCase(getItembyid.rejected,(state,action)=>{
+            state.loading=false;
+            state.editdata=[],
             state.response="danger",
             state.msg="Something Went Wrong !!",
             state.isSuccess=false;

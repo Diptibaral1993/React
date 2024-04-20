@@ -51,6 +51,27 @@ export const getStock=createAsyncThunk("getstock",async(data)=>{
     
 });
 
+export const getAllocations=createAsyncThunk("getallocations",async()=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/api/allocation");
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+});
+
+export const getDistributions=createAsyncThunk("getdistributions",async()=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/api/distribution");
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+});
+
+
 export const getStockBygni=createAsyncThunk("getstockbygni",async(data)=>{
     try {
         const response=await fetch("https://dn.deeds.services/stock/bygni?gdwid="+data.gwdid+"&itmid="+data.itmid);
@@ -65,6 +86,7 @@ export const getStockByExecutive=createAsyncThunk("getstockbyexecutive",async(da
     try {
         
         const response=await fetch("https://dn.deeds.services/stock/stockbyexecutive?id="+data.id+"&itmid="+data.itmid);
+        console.log("https://dn.deeds.services/stock/stockbyexecutive?id="+data.id+"&itmid="+data.itmid);
         return response.json();
     } catch (error) {
         
@@ -77,13 +99,17 @@ const listdistribution=localStorage.getItem("listdistribution")?JSON.parse(local
 
 const stockSlice=createSlice({
     name:"stock",
-    initialState:{data:[],loading:false,response:"",msg:"",isSuccess:false,quantity:0,alllist:listallocation,distlist:listdistribution},
+    initialState:{data:[],distdata:[],allocdata:[],loading:false,response:"",msg:"",isSuccess:false,quantity:0,alllist:listallocation,distlist:listdistribution},
     reducers:{
         clearStateStock(state){
             state.isSuccess=false;
             state.response="";
             state.msg="";
             state.data=[];
+            state.distdata=[];
+            state.allocdata=[];
+            //localStorage.setItem("listdistribution",[]);
+            //localStorage.setItem("listallocation",[]);
         },
         addListAllocation(state,action){
           
@@ -245,6 +271,42 @@ const stockSlice=createSlice({
             
         }),
         builder.addCase(getStockByExecutive.rejected,(state, action)=>{
+            state.loading=false;
+            state.isSuccess=true;
+            state.response="danger",
+            state.msg="Something Went Wrong !!";
+            
+        }),
+        builder.addCase(getAllocations.pending,(state, action)=>{
+            state.loading=true;
+            
+        }),
+        builder.addCase(getAllocations.fulfilled,(state, action)=>{
+            state.loading=false;
+   
+            state.allocdata=action.payload.status=="404"?[]:action.payload;
+            
+            
+        }),
+        builder.addCase(getAllocations.rejected,(state, action)=>{
+            state.loading=false;
+            state.isSuccess=true;
+            state.response="danger",
+            state.msg="Something Went Wrong !!";
+            
+        }),
+        builder.addCase(getDistributions.pending,(state, action)=>{
+            state.loading=true;
+            
+        }),
+        builder.addCase(getDistributions.fulfilled,(state, action)=>{
+            state.loading=false;
+   
+            state.distdata=action.payload.status=="404"?[]:action.payload;
+            
+            
+        }),
+        builder.addCase(getDistributions.rejected,(state, action)=>{
             state.loading=false;
             state.isSuccess=true;
             state.response="danger",

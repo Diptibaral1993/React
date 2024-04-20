@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import DataTable, { createTheme } from "react-data-table-component";
+import DataTable, { Alignment, createTheme } from "react-data-table-component";
 import { Col, Form, Row, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { CiTextAlignCenter } from "react-icons/ci";
 
 const customStyle = {
   headRow: {
@@ -43,7 +44,7 @@ function Datatable(props) {
             style={{ display: props.hidden, paddingLeft: "0.1rem" }}
           >
             <Link className="btn btn-primary" role="button" to="add">
-              Add +
+              +
             </Link>
           </Col>
         </Row>

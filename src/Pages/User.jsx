@@ -314,8 +314,9 @@ function User() {
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel label="PAN Image">
               <Form.Control
+                type="file"
                 required
-                placeholder="PAN Image"
+                placeholder="Pan Image"
                 value={user.panimg}
                 onChange={(e) => {
                   setUser({ ...user, panimg: e.target.value });
@@ -357,7 +358,7 @@ function User() {
               </Form.Control.Feedback>
             </FloatingLabel>
           </Form.Group>
-          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+          {/* <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel label="Date Of Registration">
               <Form.Control
                 type="date"
@@ -372,7 +373,7 @@ function User() {
                 Enter Date Of Registration!!
               </Form.Control.Feedback>
             </FloatingLabel>
-          </Form.Group>
+          </Form.Group> */}
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel label="Experience">
               <Form.Control

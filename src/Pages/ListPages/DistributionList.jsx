@@ -1,41 +1,42 @@
 import React, { useEffect, useState } from "react";
 import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
-import { getGodown } from "../../Redux/Slice/GodownSlice";
+
 import Loader from "../../Components/Loader";
+import {
+  getDistributions,
+  clearStateStock,
+} from "../../Redux/Slice/stockSlice";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 
-function GodownList() {
+function DistributionList() {
   const columns = [
     {
       name: "#",
       selector: (row) => row.id,
       sortable: true,
     },
+
     {
-      name: "GODOWN",
-      selector: (row) => row.name,
+      name: "EXECUTIVE",
+      selector: (row) => row.executivename,
       sortable: true,
     },
     {
-      name: "COMPANY",
-      selector: (row) => row.companyname,
+      name: "DEALER",
+      selector: (row) => row.dealername,
+      sortable: true,
+    },
+
+    {
+      name: "ITEM",
+      selector: (row) => row.itemname,
       sortable: true,
     },
     {
-      name: "CONTACT PERSON",
-      selector: (row) => row.contactperson,
-      sortable: true,
-    },
-    {
-      name: "E-MAIL",
-      selector: (row) => row.email,
-      sortable: true,
-    },
-    {
-      name: "PHONE",
-      selector: (row) => row.phone,
+      name: "QUANTITY",
+      selector: (row) => row.quantity,
       sortable: true,
     },
     {
@@ -60,39 +61,39 @@ function GodownList() {
     },
   ];
 
-  const godownData = useSelector((state) => state.godown);
+  const distributiondata = useSelector((state) => state.stock);
   const dipatch = useDispatch();
 
   const [records, setRecords] = useState([]);
 
   function handleFilter(event) {
-    const newdata = godownData.data.filter((row) => {
+    const newdata = distributiondata.distdata.filter((row) => {
       return (
-        row.name.includes(event.target.value) ||
-        row.companyname.includes(event.target.values) ||
-        row.phone.includes(event.target.value) ||
-        row.contactperson.includes(event.target.value) ||
-        row.email.includes(event.target.value)
+        row.dealername.includes(event.target.value) ||
+        row.executivename.includes(event.target.value) ||
+        row.itemname.includes(event.target.value)
       );
     });
     setRecords(newdata);
   }
 
   useEffect(() => {
-    if (godownData.data.length != 0) {
-      godownData.data.map((item, index) => {
-        setRecords(godownData.data);
-      });
-    }
-  }, [godownData]);
+    dipatch(clearStateStock());
+    dipatch(getDistributions());
+  }, []);
 
   useEffect(() => {
-    dipatch(getGodown());
-  }, []);
+    if (distributiondata.distdata.length != 0) {
+      distributiondata.distdata.map((item, index) => {
+        setRecords(distributiondata.distdata);
+      });
+    }
+  }, [distributiondata]);
 
   return (
     <>
-      {godownData.data != null && (
+      {distributiondata.loading && <Loader />}
+      {distributiondata.distdata != null && (
         <Datatable
           data={records}
           columns={columns}
@@ -100,10 +101,8 @@ function GodownList() {
           hidden="block"
         />
       )}
-
-      {godownData.loading && <Loader />}
     </>
   );
 }
 
-export default GodownList;
+export default DistributionList;

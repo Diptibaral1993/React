@@ -3,6 +3,8 @@ import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
 import { getCompanies } from "../../Redux/Slice/companySlice";
 import Loader from "../../Components/Loader";
+import { CiEdit } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
 
 function CompanyList() {
   const columns = [
@@ -29,6 +31,26 @@ function CompanyList() {
     {
       name: "PHONE",
       selector: (row) => row.phone,
+      sortable: true,
+    },
+    {
+      name: "ACTION",
+      cell: (row) => (
+        <>
+          <span>
+            <CiEdit
+              style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+          <span>
+            <MdDelete
+              style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+        </>
+      ),
       sortable: true,
     },
   ];

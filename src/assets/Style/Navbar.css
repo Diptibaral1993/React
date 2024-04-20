@@ -8,24 +8,25 @@
     display: flex;
     justify-content: start;
     align-items: initial;
-    
+    margin-left: 8rem;
   }
   
   .menu-bars {
     margin-left: 1rem;
     font-size: 1.5rem;
     background: none;
+    display: none;
   }
   
   .nav-menu {
     background-color: var(--navBg);
-    width: 350px;
+    width: 15rem;
     height: 100vh;
     display: flex;
     justify-content: center;
     position: fixed;
     top: 0;
-    left: -100%;
+    
     transition: 850ms;
   }
   
@@ -46,13 +47,20 @@
       position: fixed;
       top: 0;
       left: -100%;
-      transition: 850ms;
+      transition: 450ms;
+    }
+
+    .menu-bars {
+      margin-left: 1rem;
+      font-size: 1.5rem;
+      background: none;
+      display: block;
     }
 
     .gradient-text {
       /* Define the gradient */
       background: #dedcde;
-      
+     
     
       font-weight: bold;
       font-size: 1.5rem !important;
@@ -62,23 +70,46 @@
       -webkit-text-fill-color: transparent;
     }
 
+    
+
     .cust_card{
-      margin: 0.3em !important;;
+      margin: 0.3em !important;
+      margin-left: 0.3rem !important;
     }
+
+    .navbar {
+      background-color: var(--navBg);
+      height: 50px;
+      display: flex;
+      justify-content: start;
+      align-items: initial;
+      margin-left: 0rem !important;
+    }
+    
   }
 
   .cust_card{
     margin:1em;
+    margin-left: 16rem ;
   }
   
-  .nav-text {
+  /* .nav-text {
     display: flex;
     justify-content: start;
     align-items: center;
     padding: 8px 0 8px 16px;
     list-style: none;
     height: 60px;
-  }
+  } */
+
+  .nav-text {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 6px 0 6px 16px;
+    list-style: none;
+    /* height: 60px; */
+}
   
   .nav-text a {
     text-decoration: none;
@@ -106,19 +137,21 @@
     width: 100%;
     height: 80px;
     display: flex;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
+    padding: 1rem;
   }
   
   span {
     margin-left: 16px;
+    font-family: system-ui;
   }
 
   .gradient-text {
     /* Define the gradient */
     background: #dedcde;
     
-  
+
     font-weight: bold;
     font-size: 25px;
     
@@ -127,4 +160,11 @@
     -webkit-text-fill-color: transparent;
     
   }
+
+  .animationAction:hover{
+    transform: scale(1.3);
+  }
+
+
+  
   

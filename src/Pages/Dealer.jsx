@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getGodownbyCompany } from "../Redux/Slice/GodownSlice";
 import { getUsers } from "../Redux/Slice/userSlice";
 import { getCompanies } from "../Redux/Slice/companySlice";
-import { addDealer } from "../Redux/Slice/dealerSlice";
+import { addDealer, clearStateDealer } from "../Redux/Slice/dealerSlice";
 import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
 import { useNavigate } from "react-router-dom";
@@ -71,8 +71,38 @@ function Dealer() {
       setValidated(true);
     } else {
       dispatch(addDealer(dealer));
+      setDealer({
+        ...dealer,
+        id: 0,
+        name: "",
+        phone: "",
+        email: "",
+        gstnumber: "",
+        pannumber: "",
+        company: "",
+        godown: "",
+        salesperson: "",
+        country: "",
+        state: "",
+        city: "",
+        area: "",
+        pincode: "",
+        createdby: 0,
+        createddt: formatDate(),
+        updatedby: 0,
+        updateddt: "",
+        status: 1,
+      });
     }
   };
+
+  useEffect(() => {
+    if (apiResponse.isSuccess) {
+      setTimeout(() => {
+        dispatch(clearStateDealer());
+      }, 3000);
+    }
+  }, [apiResponse]);
 
   useEffect(() => {
     dispatch(getCountry());
@@ -331,7 +361,12 @@ function Dealer() {
             </FloatingLabel>
           </Form.Group>
         </Row>
-        <Button variant="outline-success" type="submit" className="mt-2">
+        <Button
+          variant="outline-success"
+          type="submit"
+          className="mt-2"
+          disabled={!apiResponse.loading && false}
+        >
           Submit
         </Button>{" "}
         <Button

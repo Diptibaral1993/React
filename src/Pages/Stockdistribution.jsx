@@ -89,7 +89,7 @@ function Stockdistribution() {
       if (apiStock.data.length != 0 && stock > distribution.quantity) {
         dispatch(addDistAllocation(distribution));
         setDistribution({ ...distribution, item: "", quantity: "" });
-        dispatch(clearStateStock());
+        //dispatch(clearStateStock());
       }
     }
   };
@@ -129,7 +129,7 @@ function Stockdistribution() {
       const newdata = apiStock.distlist.filter((row) => {
         return row.executive.includes(distribution.executive);
       });
-      console.log(newdata);
+
       setRecord(newdata);
     }
   }, [apiStock.distlist]);
@@ -211,12 +211,14 @@ function Stockdistribution() {
                     item: e.target.value,
                     itemname: e.nativeEvent.target[e.target.selectedIndex].text,
                   });
-                  dispatch(
-                    getStockByExecutive({
-                      id: distribution.dealer,
-                      itmid: e.target.value,
-                    })
-                  );
+                  distribution.executive != ""
+                    ? dispatch(
+                        getStockByExecutive({
+                          id: distribution.executive,
+                          itmid: e.target.value,
+                        })
+                      )
+                    : "";
                 }}
               >
                 <option value="">Select Item</option>
@@ -277,7 +279,7 @@ function Stockdistribution() {
           variant="outline-danger"
           type="button"
           className="mt-2"
-          onClick={() => navigate("/stock")}
+          onClick={() => navigate("/stock/distribution")}
         >
           Close
         </Button>

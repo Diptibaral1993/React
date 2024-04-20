@@ -20,7 +20,7 @@
     "bootstrap": "^5.3.3",
     "cdbreact": "^1.5.18",
     "jquery": "^3.7.1",
-    "mdbreact": "^5.2.0",
+    "mdbreact": "^4.6.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-bs-datatable": "^3.15.0",

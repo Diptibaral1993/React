@@ -3,6 +3,8 @@ import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
 import { getItems } from "../../Redux/Slice/itemSlice";
 import Loader from "../../Components/Loader";
+import { CiEdit } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
 
 function itemList() {
   const columns = [
@@ -14,6 +16,26 @@ function itemList() {
     {
       name: "ITEM NAME",
       selector: (row) => row.name,
+      sortable: true,
+    },
+    {
+      name: "ACTION",
+      cell: (row) => (
+        <>
+          <span>
+            <CiEdit
+              style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+          <span>
+            <MdDelete
+              style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+        </>
+      ),
       sortable: true,
     },
   ];
@@ -50,7 +72,7 @@ function itemList() {
           data={records}
           columns={columns}
           handleFilter={handleFilter}
-          hidden="block"
+          hidden="none"
         />
       )}
     </>

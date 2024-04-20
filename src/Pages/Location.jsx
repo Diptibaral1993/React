@@ -19,8 +19,6 @@ function Location() {
   const apiLocationResponse = useSelector((state) => state.location);
   const dispatch = useDispatch();
 
-  console.log(apiLocationResponse);
-
   const [location, setLocation] = useState({
     country: 0,
     state: 0,
@@ -46,6 +44,25 @@ function Location() {
 
   useEffect(() => {
     if (apiLocationResponse.response != "") {
+      switch (show.header) {
+        case "Country":
+          dispatch(getCountry());
+          break;
+        case "State":
+          dispatch(getState(show.reference));
+          break;
+        case "City":
+          dispatch(getCity(show.reference));
+          break;
+        case "Area":
+          dispatch(getArea(show.reference));
+          break;
+        case "Pincode":
+          dispatch(getPincode(show.reference));
+          break;
+        default:
+          break;
+      }
       setShow({ visible: false, header: "", reference: 0 });
     }
 

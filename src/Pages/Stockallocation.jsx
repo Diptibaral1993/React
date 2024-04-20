@@ -236,7 +236,7 @@ function Stockallocation() {
                 ))}
               </Form.Select>
               <Form.Control.Feedback type="invalid">
-                Select Company!!
+                Select Godown!!
               </Form.Control.Feedback>
             </FloatingLabel>
           </Form.Group>
@@ -344,14 +344,14 @@ function Stockallocation() {
           variant="outline-danger"
           type="button"
           className="mt-2"
-          onClick={() => navigate("/stock")}
+          onClick={() => navigate("/stock/allocation")}
         >
           Close
         </Button>
       </Form>
       <TableContainer component={Paper} className="mt-3">
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead style={{ backgroundColor: "gray" }}>
+          <TableHead style={{ backgroundColor: "#7ba6de" }}>
             <TableRow>
               <TableCell style={{ color: "white" }}>#</TableCell>
               <TableCell style={{ color: "white" }}>Company</TableCell>

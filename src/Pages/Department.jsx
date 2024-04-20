@@ -10,6 +10,8 @@ import {
 } from "../Redux/Slice/departmentSlice";
 import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
+import { CiEdit } from "react-icons/ci";
+import { MdDelete } from "react-icons/md";
 
 function Department() {
   const formatDate = () => {
@@ -50,7 +52,27 @@ function Department() {
     },
     {
       name: "STATUS",
-      selector: (row) => row.status,
+      selector: (row) => (row.status == 1 ? "Active" : "Inactive"),
+      sortable: true,
+    },
+    {
+      name: "ACTION",
+      cell: (row) => (
+        <>
+          <span>
+            <CiEdit
+              style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+          <span>
+            <MdDelete
+              style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
+              className="animationAction"
+            />
+          </span>
+        </>
+      ),
       sortable: true,
     },
   ];

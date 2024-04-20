@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
-import { getGodown } from "../../Redux/Slice/GodownSlice";
+
 import Loader from "../../Components/Loader";
+import { getAllocations, clearStateStock } from "../../Redux/Slice/stockSlice";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 
-function GodownList() {
+function AllocationList() {
   const columns = [
     {
       name: "#",
       selector: (row) => row.id,
-      sortable: true,
-    },
-    {
-      name: "GODOWN",
-      selector: (row) => row.name,
       sortable: true,
     },
     {
@@ -24,18 +20,23 @@ function GodownList() {
       sortable: true,
     },
     {
-      name: "CONTACT PERSON",
-      selector: (row) => row.contactperson,
+      name: "GODOWN",
+      selector: (row) => row.godownname,
       sortable: true,
     },
     {
-      name: "E-MAIL",
-      selector: (row) => row.email,
+      name: "EXECUTIVE",
+      selector: (row) => row.executivename,
       sortable: true,
     },
     {
-      name: "PHONE",
-      selector: (row) => row.phone,
+      name: "ITEM",
+      selector: (row) => row.itemname,
+      sortable: true,
+    },
+    {
+      name: "QUANTITY",
+      selector: (row) => row.quantity,
       sortable: true,
     },
     {
@@ -60,39 +61,40 @@ function GodownList() {
     },
   ];
 
-  const godownData = useSelector((state) => state.godown);
+  const allocationdata = useSelector((state) => state.stock);
   const dipatch = useDispatch();
 
   const [records, setRecords] = useState([]);
 
   function handleFilter(event) {
-    const newdata = godownData.data.filter((row) => {
+    const newdata = allocationdata.allocdata.filter((row) => {
       return (
-        row.name.includes(event.target.value) ||
-        row.companyname.includes(event.target.values) ||
-        row.phone.includes(event.target.value) ||
-        row.contactperson.includes(event.target.value) ||
-        row.email.includes(event.target.value)
+        row.companyname.includes(event.target.value) ||
+        row.godownname.includes(event.target.value) ||
+        row.executivename.includes(event.target.value) ||
+        row.itemname.includes(event.target.value)
       );
     });
     setRecords(newdata);
   }
 
   useEffect(() => {
-    if (godownData.data.length != 0) {
-      godownData.data.map((item, index) => {
-        setRecords(godownData.data);
+    if (allocationdata.allocdata.length != 0) {
+      allocationdata.allocdata.map((item, index) => {
+        setRecords(allocationdata.allocdata);
       });
     }
-  }, [godownData]);
+  }, [allocationdata]);
 
   useEffect(() => {
-    dipatch(getGodown());
+    dipatch(getAllocations());
+    dipatch(clearStateStock());
   }, []);
 
   return (
     <>
-      {godownData.data != null && (
+      {allocationdata.loading && <Loader />}
+      {allocationdata.allocdata != null && (
         <Datatable
           data={records}
           columns={columns}
@@ -100,10 +102,8 @@ function GodownList() {
           hidden="block"
         />
       )}
-
-      {godownData.loading && <Loader />}
     </>
   );
 }
 
-export default GodownList;
+export default AllocationList;

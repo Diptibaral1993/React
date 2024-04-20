@@ -31,6 +31,8 @@ import Dealer from "./Pages/Dealer";
 import DealerMapping from "./Pages/DealerMapping";
 import CompanyList from "./Pages/ListPages/CompanyList";
 import StockList from "./Pages/ListPages/StockList";
+import AllocationList from "./Pages/ListPages/AllocationList";
+import DistributionList from "./Pages/ListPages/DistributionList";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -54,16 +56,18 @@ const router = createBrowserRouter([
       //Stock Route
       { path: "stock", element: <StockList /> },
       { path: "stock/add", element: <Stock /> },
-      { path: "stock/allocation", element: <Stockallocation /> },
-      { path: "stock/distribution", element: <Stockdistribution /> },
+      { path: "stock/allocation", element: <AllocationList /> },
+      { path: "stock/distribution", element: <DistributionList /> },
+      { path: "stock/allocation/add", element: <Stockallocation /> },
+      { path: "stock/distribution/add", element: <Stockdistribution /> },
 
       //user Route
       { path: "user", element: <UserList /> },
       { path: "user/add", element: <User /> },
 
       //item route
-      { path: "item", element: <ItemList /> },
-      { path: "item/add", element: <Item /> },
+      // { path: "item", element: <ItemList /> },
+      { path: "item", element: <Item /> },
 
       //Dealers Route
       { path: "dealer", element: <DealerList /> },

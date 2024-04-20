@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
-import * as IoIcons from "react-icons/io";
 import * as FcIcons from "react-icons/fc";
+import { RiAdminLine } from "react-icons/ri";
 import { CgOrganisation } from "react-icons/cg";
 import * as Io5 from "react-icons/io5";
 import "../assets/Style/Navbar.css";
 import { IconContext } from "react-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useLocation, Outlet } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 import { getMenus } from "../Redux/Slice/menuSlice";
 import Nav from "react-bootstrap/Nav";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Navbar from "react-bootstrap/Navbar";
+import { SiStatuspage } from "react-icons/si";
 function layout1() {
   const [routingHeader, setRoutingHeader] = useState("Dashboard");
   const [sidebar, setSidebar] = useState(false);
@@ -77,6 +78,24 @@ function layout1() {
     }
   }, []);
 
+  const [submenuOpen, setSubmenuOpen] = useState({ one: false, two: false });
+
+  // Function to toggle submenu visibility
+  const toggleSubmenu = () => {
+    setSubmenuOpen({
+      ...submenuOpen,
+      one: submenuOpen.one ? false : true,
+      two: false,
+    });
+  };
+
+  const toggleSubmenu2 = () => {
+    setSubmenuOpen({
+      ...submenuOpen,
+      two: submenuOpen.two ? false : true,
+      one: false,
+    });
+  };
   return (
     <>
       <IconContext.Provider value={{ color: "#FFF" }}>
@@ -88,9 +107,9 @@ function layout1() {
             </Link>
           </Col>
           <Col xs={10} sm={10} md={10}>
-            <Navbar.Brand className="gradient-text">
+            {/* <Navbar.Brand className="gradient-text">
               Dn-Peripherial
-            </Navbar.Brand>
+            </Navbar.Brand> */}
           </Col>
           <Col
             xs={1}
@@ -114,11 +133,16 @@ function layout1() {
         >
           <ul className="nav-menu-items">
             <li className="navbar-toggle">
+              <Navbar.Brand className="gradient-text">
+                Dn-Peripherial
+              </Navbar.Brand>
+
               <Link to="#" className="menu-bars">
                 <AiIcons.AiOutlineClose onClick={showSidebar} />
               </Link>
             </li>
-            {menulist?.menus?.map((item) => (
+
+            {/* {menulist?.menus?.map((item) => (
               <li className="nav-text">
                 <Nav.Link
                   as={Link}
@@ -130,14 +154,154 @@ function layout1() {
                   <span>{item.menuname}</span>
                 </Nav.Link>
               </li>
-            ))}
+            ))} */}
 
-            {/* <li className="nav-text">
-              <Link>
+            <li className="nav-text">
+              <Nav.Link
+                as={Link}
+                to={"/"}
+                onClick={() => setHeader("DASHBOARD")}
+              >
                 <AiIcons.AiFillHome />
-                <span>Home</span>
+                <span>DASHBOARD</span>
+              </Nav.Link>
+            </li>
+            <li className="nav-text">
+              <a className="nav-link" onClick={toggleSubmenu}>
+                <RiAdminLine />
+                <span>ADMINISTRATION</span>
+              </a>
+            </li>
+            {submenuOpen.one && (
+              <ul style={{ paddingLeft: "35px !important" }}>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/company"}
+                    onClick={() => setHeader("BRANCH")}
+                  >
+                    <CgOrganisation />
+                    <a href="#">BRANCH</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/location"}
+                    onClick={() => setHeader("LOCATION")}
+                  >
+                    <FaIcons.FaMapMarkerAlt />
+                    <a href="#">LOCATION</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/designation"}
+                    onClick={() => setHeader("DESIGNATION")}
+                  >
+                    <FaIcons.FaUserTie />
+                    <a href="#">DESIGNATION</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/department"}
+                    onClick={() => setHeader("DEPARTMENT")}
+                  >
+                    <FcIcons.FcDepartment />
+                    <a href="#">DEPARTMENT</a>
+                  </Nav.Link>
+                </li>
+              </ul>
+            )}
+            <li className="nav-text">
+              <a className="nav-link" onClick={toggleSubmenu2}>
+                <SiStatuspage />
+                <span>MASTERS</span>
+              </a>
+            </li>
+            {submenuOpen.two && (
+              <ul style={{ paddingLeft: "35px !important" }}>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/user"}
+                    onClick={() => setHeader("EMPLOYEE MASTER")}
+                  >
+                    <FaIcons.FaUsers />
+                    <a href="#">EMPLOYEE</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/item"}
+                    onClick={() => setHeader("ITEM MASTER")}
+                  >
+                    <Io5.IoBagHandleSharp />
+                    <a href="#">ITEM</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/dealer"}
+                    onClick={() => setHeader("DEALER MASTER")}
+                  >
+                    <FaIcons.FaHandshake />
+                    <a href="#">DEALER</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/godown"}
+                    onClick={() => setHeader("WAREHOUSE MASTER")}
+                  >
+                    <FaIcons.FaWarehouse />
+                    <a href="#">WAREHOUSE</a>
+                  </Nav.Link>
+                </li>
+              </ul>
+            )}
+            <li className="nav-text">
+              <Nav.Link
+                as={Link}
+                to={"/stock"}
+                onClick={() => setHeader("STOCK")}
+              >
+                <AiIcons.AiOutlineStock />
+                <span>STOCK</span>
+              </Nav.Link>
+            </li>
+            <li className="nav-text">
+              <Nav.Link
+                as={Link}
+                to={"/stock/allocation"}
+                onClick={() => setHeader("ALLOCATION")}
+              >
+                <FcIcons.FcParallelTasks />
+                <span>ALLOCATION</span>
+              </Nav.Link>
+            </li>
+            <li className="nav-text">
+              <Nav.Link
+                as={Link}
+                to={"/stock/distribution"}
+                onClick={() => setHeader("DISTRIBUTION")}
+              >
+                <FaIcons.FaShippingFast />
+                <span>DISTRIBUTION</span>
+              </Nav.Link>
+            </li>
+            <li className="nav-text">
+              <Link>
+                <FaIcons.FaBookOpen />
+                <span>MIS</span>
               </Link>
-            </li> */}
+            </li>
           </ul>
         </nav>
         <Card className="text-center cust_card">
