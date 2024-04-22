@@ -30,6 +30,11 @@ export const updateCompany=createAsyncThunk("updatecompany",async (data)=>{
   
 })
 
+export const ActiveInactive=createAsyncThunk("activeinactive",async(id)=>{
+  const response=await fetch("http://dn.deeds.services/company/activeinactive?id="+id);
+  return response.json();
+})
+
 export const getCompanies=createAsyncThunk("getcompanies",async()=>{
   const response=await fetch("http://dn.deeds.services/api/company");
   return response.json();
@@ -44,13 +49,15 @@ export const getCompanybyid=createAsyncThunk("getcompanybyid",async(id)=>{
 
 const companySlice = createSlice({
   name: "company",
-  initialState: {data:[],editdata:[],response:"",isSuccess:false,msg:"",loading:false},
+  initialState: {data:[],editdata:[],response:"",isSuccess:false,msg:"",loading:false,isDelete:false,isUpdate:false},
   reducers: {
     clearStateCompany(state)
        {
         state.response="",
         state.isSuccess=false,
         state.msg=""
+        state.isDelete=false;
+        state.isUpdate=false;
        },
   },
   extraReducers:(builder)=>{
@@ -77,7 +84,7 @@ const companySlice = createSlice({
       state.data=[];
       state.loading=false;
       state.msg="Branch Updated !!"
-      state.isSuccess=true;
+      state.isUpdate=true;
       
     }),
     builder.addCase(updateCompany.rejected,(state,action)=>{
@@ -107,8 +114,7 @@ const companySlice = createSlice({
     }),
     builder.addCase(getCompanies.pending,(state,action)=>{
       state.loading=true;
-      state.msg="";
-      state.response="";
+
       
     }),
 
@@ -126,8 +132,27 @@ const companySlice = createSlice({
     }),
     builder.addCase(getCompanybyid.pending,(state,action)=>{
       state.loading=true;
-      state.msg="";
-      state.response="";
+
+      
+    }),
+
+    builder.addCase(ActiveInactive.fulfilled, (state, action) => {
+
+      state.loading=false;
+      state.isDelete=true;
+      state.response="success",
+      state.msg="Updated Successfully !! ";
+     
+    }),
+    builder.addCase(ActiveInactive.rejected,(state,action)=>{
+      state.msg="Something Went Wrong !!";
+      state.loading=false;
+      state.response="danger";
+      state.msg="Something went wrong !!";
+    }),
+    builder.addCase(ActiveInactive.pending,(state,action)=>{
+      state.loading=true;
+     
       
     })
   }

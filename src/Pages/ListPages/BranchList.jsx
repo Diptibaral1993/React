@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
-import { getCompanies } from "../../Redux/Slice/companySlice";
+import {
+  ActiveInactive,
+  getCompanies,
+  clearStateCompany,
+} from "../../Redux/Slice/companySlice";
 import Loader from "../../Components/Loader";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
@@ -62,6 +66,7 @@ function CompanyList() {
             <MdDelete
               style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
+              onClick={() => handleDelete(row.id)}
             />
           </span>
         </>
@@ -73,6 +78,8 @@ function CompanyList() {
   const companydata = useSelector((state) => state.company);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [res, setRes] = useState({ response: "", msg: "", isActive: false });
 
   const [records, setRecords] = useState([]);
 
@@ -94,6 +101,7 @@ function CompanyList() {
 
   const handleDelete = (val) => {
     if (confirm("Are You Sure Want To Delete?")) {
+      dispatch(ActiveInactive(val));
     }
   };
 
@@ -103,9 +111,18 @@ function CompanyList() {
         setRecords(companydata.data);
       });
 
-      setTimeout(() => {
-        dispatch(clearStateCompany());
-      }, 3000);
+      dispatch(clearStateCompany());
+    }
+
+    if (companydata.isUpdate) {
+      toastmessage();
+      dispatch(clearStateCompany());
+    }
+
+    if (companydata.isDelete) {
+      dispatch(getCompanies());
+      toastmessage();
+      dispatch(clearStateCompany());
     }
   }, [companydata]);
 
@@ -113,15 +130,27 @@ function CompanyList() {
     dispatch(getCompanies());
   }, []);
 
+  const toastmessage = () => {
+    setRes({
+      response: companydata.response,
+      msg: companydata.msg,
+      isActive: true,
+    });
+
+    setTimeout(() => {
+      setRes({
+        response: "",
+        msg: "",
+        isActive: false,
+      });
+    }, 3000);
+  };
+
   return (
     <>
       {companydata.loading && <Loader />}
-      {companydata.response != "" && (
-        <Toastcomponent
-          color={companydata.response}
-          msg={companydata.msg}
-          header="Branch"
-        />
+      {res.isActive && (
+        <Toastcomponent color={res.response} msg={res.msg} header="Branch" />
       )}
       {companydata.data != null && (
         <Datatable
