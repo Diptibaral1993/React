@@ -177,7 +177,7 @@ function layout1() {
                 <li className="nav-text">
                   <Nav.Link
                     as={Link}
-                    to={"/company"}
+                    to={"/branch"}
                     onClick={() => setHeader("BRANCH")}
                   >
                     <CgOrganisation />

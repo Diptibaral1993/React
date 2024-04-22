@@ -10,12 +10,17 @@ import {
   getCountry,
   getState,
   getPincode,
-} from "../Redux/Slice/locationSlice";
+} from "../Redux/Slice/locationSlice.js";
 import Button from "react-bootstrap/Button";
-import { addCompany, clearStateCompany } from "../Redux/Slice/companySlice";
+import {
+  addCompany,
+  clearStateCompany,
+  getCompanybyid,
+  updateCompany,
+} from "../Redux/Slice/companySlice.js";
 import Toastcomponent from "../Components/Toastcomponent.jsx";
 import Loader from "../Components/Loader.jsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Company() {
   const [company, setCompany] = useState({
@@ -40,6 +45,8 @@ function Company() {
 
   const apiResponse = useSelector((state) => state.company);
   const apiLocationResponse = useSelector((state) => state.location);
+
+  const [isEdit, setIsEdit] = useState(false);
   const dispatch = useDispatch();
 
   //handle form submit here
@@ -51,8 +58,14 @@ function Company() {
       event.stopPropagation();
       setValidated(true);
     } else {
-      dispatch(addCompany(company));
-      setValidated(false);
+      if (isEdit) {
+        dispatch(updateCompany(company));
+        setValidated(false);
+        navigate("/branch");
+      } else {
+        dispatch(addCompany(company));
+        setValidated(false);
+      }
       setCompany({
         id: 0,
         companyname: "",
@@ -77,6 +90,30 @@ function Company() {
         dispatch(clearStateCompany());
       }, 3000);
     }
+
+    if (apiResponse.editdata.length != 0) {
+      setCompany({
+        id: id,
+        companyname: apiResponse.editdata[0].companyname,
+        contactperson: apiResponse.editdata[0].contactperson,
+        phone: apiResponse.editdata[0].phone,
+        email: apiResponse.editdata[0].email,
+        gstnumber: apiResponse.editdata[0].gstnumber,
+        pannumber: apiResponse.editdata[0].pannumber,
+        country: apiResponse.editdata[0].country,
+        state: apiResponse.editdata[0].state,
+        city: apiResponse.editdata[0].city,
+        area: apiResponse.editdata[0].area,
+        pincode: apiResponse.editdata[0].pincode,
+        status: apiResponse.editdata[0].status,
+      });
+      dispatch(getState(apiResponse.editdata[0].country));
+      dispatch(getCity(apiResponse.editdata[0].state));
+      dispatch(getArea(apiResponse.editdata[0].city));
+      dispatch(getPincode(apiResponse.editdata[0].area));
+
+      setIsEdit(true);
+    }
   }, [apiResponse]);
 
   useEffect(() => {
@@ -85,26 +122,33 @@ function Company() {
     }
   }, [company]);
 
+  const { id } = useParams();
   //On pgaeload Event Fire to Get Menu
   useEffect(() => {
     dispatch(getCountry());
   }, []);
+
+  useEffect(() => {
+    if (id != undefined && id != 0) {
+      dispatch(getCompanybyid(id));
+    }
+  }, [id]);
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
         <Row>
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-            <FloatingLabel label="Company Name">
+            <FloatingLabel label="Branch Name">
               <Form.Control
                 required
-                placeholder="Company Name"
+                placeholder="Branch Name"
                 value={company.companyname}
                 onChange={(e) => {
                   setCompany({ ...company, companyname: e.target.value });
                 }}
               />
               <Form.Control.Feedback type="invalid">
-                Enter Company Name !!
+                Enter Branch Name !!
               </Form.Control.Feedback>
             </FloatingLabel>
           </Form.Group>
@@ -285,13 +329,16 @@ function Company() {
             </FloatingLabel>
           </Form.Group>
         </Row>
-        <Button variant="outline-success" type="submit">
+        <Button variant="outline-success" type="submit" hidden={isEdit}>
           Submit
+        </Button>{" "}
+        <Button variant="outline-success" type="submit" hidden={!isEdit}>
+          Update
         </Button>{" "}
         <Button
           variant="outline-danger"
           type="button"
-          onClick={() => navigate("/company")}
+          onClick={() => navigate("/branch")}
         >
           Close
         </Button>{" "}
@@ -302,7 +349,7 @@ function Company() {
         <Toastcomponent
           color={apiResponse.response}
           msg={apiResponse.msg}
-          header="Company"
+          header="Branch"
         />
       )}
     </>

@@ -13,7 +13,7 @@ import Home from "./Pages/Home";
 import User from "./Pages/User";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store";
-import Company from "./Pages/Company";
+import Branch from "./Pages/Branch";
 
 import Godown from "./Pages/Godown";
 import Location from "./Pages/Location";
@@ -29,7 +29,7 @@ import ItemList from "./Pages/ListPages/ItemList";
 import DealerList from "./Pages/ListPages/DealerList";
 import Dealer from "./Pages/Dealer";
 import DealerMapping from "./Pages/DealerMapping";
-import CompanyList from "./Pages/ListPages/CompanyList";
+import BranchList from "./Pages/ListPages/BranchList";
 import StockList from "./Pages/ListPages/StockList";
 import AllocationList from "./Pages/ListPages/AllocationList";
 import DistributionList from "./Pages/ListPages/DistributionList";
@@ -43,8 +43,10 @@ const router = createBrowserRouter([
       { path: "", element: <Home /> },
 
       //Company Route
-      { path: "company/add", element: <Company /> },
-      { path: "company", element: <CompanyList /> },
+
+      { path: "branch", element: <BranchList /> },
+      { path: "branch/add", element: <Branch /> },
+      { path: "branch/add/:id", element: <Branch /> },
 
       //Godown Route
       { path: "godown/add", element: <Godown /> },

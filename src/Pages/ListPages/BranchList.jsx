@@ -5,6 +5,10 @@ import { getCompanies } from "../../Redux/Slice/companySlice";
 import Loader from "../../Components/Loader";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import Toastcomponent from "../../Components/Toastcomponent";
+import { TiTick } from "react-icons/ti";
+import { MdBlock } from "react-icons/md";
 
 function CompanyList() {
   const columns = [
@@ -14,7 +18,7 @@ function CompanyList() {
       sortable: true,
     },
     {
-      name: "COMPANY",
+      name: "BRANCH",
       selector: (row) => row.companyname,
       sortable: true,
     },
@@ -34,6 +38,16 @@ function CompanyList() {
       sortable: true,
     },
     {
+      name: "STATUS",
+      selector: (row) =>
+        row.status == 1 ? (
+          <TiTick style={{ color: "green", fontSize: "1.3rem" }} />
+        ) : (
+          <MdBlock style={{ color: "red", fontSize: "1.3rem" }} />
+        ),
+      sortable: true,
+    },
+    {
       name: "ACTION",
       cell: (row) => (
         <>
@@ -41,6 +55,7 @@ function CompanyList() {
             <CiEdit
               style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
+              onClick={() => handleEdit(row.id)}
             />
           </span>
           <span>
@@ -56,7 +71,8 @@ function CompanyList() {
   ];
 
   const companydata = useSelector((state) => state.company);
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [records, setRecords] = useState([]);
 
@@ -72,21 +88,41 @@ function CompanyList() {
     setRecords(newdata);
   }
 
+  const handleEdit = (val) => {
+    navigate("/branch/add/" + val);
+  };
+
+  const handleDelete = (val) => {
+    if (confirm("Are You Sure Want To Delete?")) {
+    }
+  };
+
   useEffect(() => {
     if (companydata.data.length != 0) {
       companydata.data.map((item, index) => {
         setRecords(companydata.data);
       });
+
+      setTimeout(() => {
+        dispatch(clearStateCompany());
+      }, 3000);
     }
   }, [companydata]);
 
   useEffect(() => {
-    dipatch(getCompanies());
+    dispatch(getCompanies());
   }, []);
 
   return (
     <>
       {companydata.loading && <Loader />}
+      {companydata.response != "" && (
+        <Toastcomponent
+          color={companydata.response}
+          msg={companydata.msg}
+          header="Branch"
+        />
+      )}
       {companydata.data != null && (
         <Datatable
           data={records}
