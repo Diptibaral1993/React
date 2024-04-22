@@ -42,6 +42,7 @@ function Item() {
   const [isedit, setIsedit] = useState(false);
 
   const dispatch = useDispatch();
+  const [res, setRes] = useState({ response: "", msg: "", isActive: false });
 
   const apiResponse = useSelector((state) => state.item);
   const columns = [
@@ -118,17 +119,11 @@ function Item() {
     } else {
       if (isedit) {
         dispatch(updateItem(items));
-        handleCancel();
       } else {
         dispatch(addItem(items));
       }
 
-      setItems({
-        id: 0,
-        name: "",
-        status: 1,
-        createddt: formatDate(),
-      });
+      handleCancel();
     }
   };
 
@@ -144,9 +139,8 @@ function Item() {
   useEffect(() => {
     if (apiResponse.isSuccess) {
       dispatch(getItems());
-      setTimeout(() => {
-        dispatch(clearStateItem());
-      }, 3000);
+      toastmessage();
+      dispatch(clearStateItem());
     }
 
     if (apiResponse.data.length != 0) {
@@ -165,6 +159,12 @@ function Item() {
         });
       }
     }
+
+    if (apiResponse.isUpdate || apiResponse.isDelete) {
+      dispatch(getItems());
+      toastmessage();
+      dispatch(clearStateItem());
+    }
   }, [apiResponse]);
 
   // useEffect(() => {}, [apiResponse]);
@@ -172,6 +172,22 @@ function Item() {
   useEffect(() => {
     dispatch(getItems());
   }, []);
+
+  const toastmessage = () => {
+    setRes({
+      response: apiResponse.response,
+      msg: apiResponse.msg,
+      isActive: true,
+    });
+
+    setTimeout(() => {
+      setRes({
+        response: "",
+        msg: "",
+        isActive: false,
+      });
+    }, 3000);
+  };
 
   return (
     <>
@@ -237,12 +253,8 @@ function Item() {
       </Form>
 
       {apiResponse.loading && <Loader />}
-      {apiResponse.isSuccess && (
-        <Toastcomponent
-          color={apiResponse.response}
-          msg={apiResponse.msg}
-          header="Item"
-        />
+      {res.isActive && (
+        <Toastcomponent color={res.response} msg={res.msg} header="Item" />
       )}
     </>
   );

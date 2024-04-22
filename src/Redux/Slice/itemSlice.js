@@ -65,13 +65,16 @@ export const getItembyid=createAsyncThunk("getitembyid",async(id)=>{
 
 const itemSlice=createSlice({
     name:"item",
-    initialState:{data:[],editdata:[], loading: false, msg: null,response:"",isSuccess:false },
+    initialState:{data:[],editdata:[], loading: false, msg: null,response:"",isSuccess:false,isUpdate:false,isDelete:false },
     reducers:{
         clearStateItem(state){
             state.msg="";
             state.response="";
             state.isSuccess=false;
-            editdata=[];
+            state.editdata=[];
+            state.isUpdate=false;
+            state.isDelete=false;
+
            
         },
     },
@@ -105,7 +108,7 @@ const itemSlice=createSlice({
             {
                 state.response="success",
                 state.msg="Updated Succesfully !!",
-                state.isSuccess=true;
+                state.isUpdate=true;
             }
             state.loading=false;
         }),
@@ -124,14 +127,14 @@ const itemSlice=createSlice({
             state.loading=false;
             state.response="success",
             state.msg="Updated Successfully !!",
-            state.isSuccess=true;
+            state.isDelete=true;
             
         }),
         builder.addCase(activeInactiveItem.rejected,(state,action)=>{
             state.loading=false;
             state.response="danger",
             state.msg="Something Went Wrong !!",
-            state.isSuccess=false;
+            state.isDelete=false;
         }),
         builder.addCase(getItems.pending,(state,action)=>{
             state.loading=true;

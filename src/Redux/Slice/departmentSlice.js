@@ -9,7 +9,16 @@ export const addDepartment=createAsyncThunk("adddepartment",async(data)=>{
     return response.json();
 })
 
-export const getDepartments=createAsyncThunk("getdepartments",async(data)=>{
+export const updateDepartment=createAsyncThunk("updatedepartment",async(data)=>{
+    const response=await fetch("https://dn.deeds.services/api/department?id="+data.id,{
+        method:"PUT",
+        headers:{Accept:"application/json","Content-Type":"application/json"},
+        body:JSON.stringify(data)
+    });
+    return response.json();
+})
+
+export const getDepartments=createAsyncThunk("getdepartments",async()=>{
     try {
         const response=await fetch("https://dn.deeds.services/api/department");
         return response.json();
@@ -19,14 +28,37 @@ export const getDepartments=createAsyncThunk("getdepartments",async(data)=>{
     
 })
 
+export const getDepartmentByid=createAsyncThunk("getdepartmentbyid",async(id)=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/departmentbyid?id="+id);
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+})
+
+export const ActiveInactive=createAsyncThunk("activeinactive",async(id)=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/department/activeinactive?id="+id);
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+})
+
 const departmentSlice=createSlice({
     name:"department",
-    initialState:{data:[],msg:"",response:"",isSuccess:false,loading:false},
+    initialState:{data:[],editData:[],msg:"",response:"",isSuccess:false,loading:false,isUpdate:false,isDelete:false},
     reducers:{
         clearStateDepartment(state){
             state.msg="";
             state.response="";
             state.isSuccess=false;
+            state.isUpdate=false;
+            state.isDelete=false;
+            state.editData=[];
         }
     },
     extraReducers:(builder)=>{
@@ -45,6 +77,21 @@ const departmentSlice=createSlice({
             state.response="danger";
             state.isSuccess=true;
         }),
+        builder.addCase(updateDepartment.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(updateDepartment.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.msg="Updated Successfully !!";
+            state.response="success";
+            state.isUpdate=true;
+        }),
+        builder.addCase(updateDepartment.rejected,(state,action)=>{
+            state.loading=true;
+            state.msg="Something went Wrong !!";
+            state.response="danger";
+            state.isSuccess=true;
+        }),
         builder.addCase(getDepartments.pending,(state,action)=>{
             state.loading=true;
         }),
@@ -54,6 +101,34 @@ const departmentSlice=createSlice({
             state.data=action.payload.status=="404"?[]:action.payload;
         }),
         builder.addCase(getDepartments.rejected,(state,action)=>{
+            state.loading=true;
+            state.msg="Something went Wrong !!";
+            state.response="danger";
+            state.isSuccess=true;
+        }),
+        builder.addCase(getDepartmentByid.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(getDepartmentByid.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.editData=action.payload.status=="404"?[]:action.payload;
+        }),
+        builder.addCase(getDepartmentByid.rejected,(state,action)=>{
+            state.loading=true;
+            state.msg="Something went Wrong !!";
+            state.response="danger";
+            state.isSuccess=true;
+        }),
+        builder.addCase(ActiveInactive.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(ActiveInactive.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.isDelete=true;
+            state.response="success";
+            state.msg="Updated Successfully !!";
+        }),
+        builder.addCase(ActiveInactive.rejected,(state,action)=>{
             state.loading=true;
             state.msg="Something went Wrong !!";
             state.response="danger";

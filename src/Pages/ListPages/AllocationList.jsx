@@ -11,7 +11,7 @@ function AllocationList() {
   const columns = [
     {
       name: "#",
-      selector: (row) => row.id,
+      selector: (row, index) => index + 1,
       sortable: true,
     },
     {

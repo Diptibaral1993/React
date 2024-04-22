@@ -7,11 +7,16 @@ import {
   addDepartment,
   getDepartments,
   clearStateDepartment,
+  getDepartmentByid,
+  updateDepartment,
+  ActiveInactive,
 } from "../Redux/Slice/departmentSlice";
 import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import { TiTick } from "react-icons/ti";
+import { MdBlock } from "react-icons/md";
 
 function Department() {
   const formatDate = () => {
@@ -36,8 +41,11 @@ function Department() {
     status: 1,
   });
 
+  const [isEdit, setIsedit] = useState(false);
+
   const apiResponse = useSelector((state) => state.department);
   const dispatch = useDispatch();
+  const [res, setRes] = useState({ response: "", msg: "", isActive: false });
 
   const columns = [
     {
@@ -52,20 +60,33 @@ function Department() {
     },
     {
       name: "STATUS",
-      selector: (row) => (row.status == 1 ? "Active" : "Inactive"),
+      selector: (row) =>
+        row.status == 1 ? (
+          <TiTick style={{ color: "green", fontSize: "1.3rem" }} />
+        ) : (
+          <MdBlock style={{ color: "red", fontSize: "1.3rem" }} />
+        ),
       sortable: true,
     },
     {
       name: "ACTION",
       cell: (row) => (
         <>
-          <span>
+          <span
+            onClick={() => {
+              handleEdit(row.id);
+            }}
+          >
             <CiEdit
               style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
             />
           </span>
-          <span>
+          <span
+            onClick={() => {
+              handleDelete(row.id);
+            }}
+          >
             <MdDelete
               style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
@@ -87,6 +108,30 @@ function Department() {
     setRecords(newdata);
   }
 
+  const handleEdit = (val) => {
+    dispatch(getDepartmentByid(val));
+    setIsedit(true);
+  };
+
+  const handleDelete = (val) => {
+    if (confirm("Are You Sure Want To Active/Inactive ?")) {
+      dispatch(ActiveInactive(val));
+    }
+  };
+
+  const handleCancel = () => {
+    setDepartment({
+      id: 0,
+      name: "",
+      createdby: 1,
+      createddt: formatDate(),
+      updatedby: 1,
+      updateddt: "",
+      status: 1,
+    });
+    setIsedit(false);
+  };
+
   //handle form submit here
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -95,25 +140,38 @@ function Department() {
       event.stopPropagation();
       setValidated(true);
     } else {
-      dispatch(addDepartment(department));
-      setDepartment({
-        id: 0,
-        name: "",
-        createdby: 1,
-        createddt: formatDate(),
-        updatedby: 1,
-        updateddt: "",
-        status: 1,
-      });
+      if (isEdit) {
+        dispatch(updateDepartment(department));
+      } else {
+        dispatch(addDepartment(department));
+      }
+      dispatch(clearStateDepartment());
+      handleCancel();
     }
   };
 
   useEffect(() => {
     if (apiResponse.isSuccess) {
       dispatch(getDepartments());
-      setTimeout(() => {
-        dispatch(clearStateDepartment());
-      }, 3000);
+      toastmessage();
+      dispatch(clearStateDepartment());
+    }
+    if (apiResponse.editData.length != 0) {
+      setDepartment({
+        id: apiResponse.editData.id,
+        name: apiResponse.editData.name,
+        createdby: apiResponse.editData.createdby,
+        createddt: apiResponse.editData.createddt,
+        updatedby: apiResponse.editData.updatedby,
+        updateddt: formatDate(),
+        status: apiResponse.editData.status,
+      });
+    }
+
+    if (apiResponse.isUpdate || apiResponse.isDelete) {
+      dispatch(getDepartments());
+      toastmessage();
+      dispatch(clearStateDepartment());
     }
   }, [apiResponse]);
 
@@ -128,6 +186,22 @@ function Department() {
   useEffect(() => {
     dispatch(getDepartments());
   }, []);
+
+  const toastmessage = () => {
+    setRes({
+      response: apiResponse.response,
+      msg: apiResponse.msg,
+      isActive: true,
+    });
+
+    setTimeout(() => {
+      setRes({
+        response: "",
+        msg: "",
+        isActive: false,
+      });
+    }, 3000);
+  };
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -148,9 +222,31 @@ function Department() {
                 </Form.Control.Feedback>
               </FloatingLabel>
             </Form.Group>
-            <Button variant="outline-success" type="submit" className="mt-2">
+            <Button
+              variant="outline-success"
+              type="submit"
+              className="mt-2"
+              hidden={isEdit}
+            >
               Submit
-            </Button>
+            </Button>{" "}
+            <Button
+              variant="outline-success"
+              type="submit"
+              className="mt-2"
+              hidden={!isEdit}
+            >
+              Update
+            </Button>{" "}
+            <Button
+              variant="outline-danger"
+              type="button"
+              className="mt-2"
+              hidden={!isEdit}
+              onClick={() => handleCancel()}
+            >
+              Cancel
+            </Button>{" "}
           </Col>
           <Col
             md={7}
@@ -168,10 +264,10 @@ function Department() {
         </Row>
       </Form>
       {apiResponse.loading && <Loader />}
-      {apiResponse.response != "" && (
+      {res.isActive && (
         <Toastcomponent
-          color={apiResponse.response}
-          msg={apiResponse.msg}
+          color={res.response}
+          msg={res.msg}
           header="Department"
         />
       )}
