@@ -36,7 +36,7 @@ function User() {
   const navigate = useNavigate();
   const [user, setUser] = useState({
     id: 0,
-    employeecode: "",
+    employeecode: 0,
     name: "",
     username: "",
     password: "",
@@ -70,6 +70,7 @@ function User() {
     updatedby: 0,
     updateddt: "",
     status: 1,
+    ImgFile: null,
   });
 
   const [validated, setValidated] = useState(false);
@@ -90,10 +91,58 @@ function User() {
       event.stopPropagation();
       setValidated(true);
     } else {
-      dispatch(addUser(user));
+      const formdata = new FormData();
+      formdata.append("id", user.id);
+      formdata.append("employeecode", user.employeecode);
+      formdata.append("name", user.name);
+      formdata.append("username", user.username);
+      formdata.append("password", user.password);
+      formdata.append("email", user.email);
+      formdata.append("dob", user.dob);
+      formdata.append("phone", user.phone);
+      formdata.append("bloodgroup", user.bloodgroup);
+      formdata.append("aadhar", user.aadhar);
+      formdata.append("aadharimg", user.aadharimg);
+      formdata.append("pan", user.pan);
+      formdata.append("panimg", user.panimg);
+      formdata.append("qualification", user.qualification);
+      formdata.append("doj", user.doj);
+      formdata.append("dor", user.dor);
+      formdata.append("experience", user.experience);
+      formdata.append("country", user.country);
+      formdata.append("state", user.state);
+      formdata.append("city", user.city);
+      formdata.append("area", user.area);
+      formdata.append("pincode", user.pincode);
+      formdata.append("profileimg", user.profileimg);
+      formdata.append("department", user.department);
+      formdata.append("designation", user.designation);
+      formdata.append("bankname", user.bankname);
+      formdata.append("accountnumber", user.accountnumber);
+      formdata.append("ifsccode", user.ifsccode);
+      formdata.append("company", user.company);
+      formdata.append("godown", user.godown);
+      formdata.append("createdby", user.createdby);
+      formdata.append("createddt", user.createddt);
+      formdata.append("updatedby", user.updatedby);
+      formdata.append("updateddt", user.updateddt);
+      formdata.append("status", user.status);
+      formdata.append(
+        "ProfileImgFile",
+        images.profileimg,
+        "desktop-1600x900.jpg"
+      );
+      formdata.append("PanImgFile", images.panimg, "desktop-1600x900.jpg");
+      formdata.append(
+        "AadharImgFile",
+        images.aadharimg,
+        "desktop-1600x900.jpg"
+      );
+
+      dispatch(addUser(formdata));
       setUser({
         id: 0,
-        employeecode: "",
+        employeecode: 0,
         name: "",
         username: "",
         password: "",
@@ -127,8 +176,27 @@ function User() {
         updatedby: 0,
         updateddt: "",
         status: 1,
+        ImgFile: null,
       });
     }
+  };
+
+  const [images, setImages] = useState({
+    panimg: "",
+    aadharimg: "",
+    profileimg: "",
+  });
+
+  const handleProfileimg = (event) => {
+    setImages({ ...images, profileimg: event.target.files[0] });
+  };
+
+  const handlePanimg = (event) => {
+    setImages({ ...images, panimg: event.target.files[0] });
+  };
+
+  const handleAadharimg = (event) => {
+    setImages({ ...images, aadharimg: event.target.files[0] });
   };
 
   useEffect(() => {
@@ -289,6 +357,7 @@ function User() {
                 value={user.aadharimg}
                 onChange={(e) => {
                   setUser({ ...user, aadharimg: e.target.value });
+                  handleAadharimg(e);
                 }}
               />
               <Form.Control.Feedback type="invalid">
@@ -320,6 +389,7 @@ function User() {
                 value={user.panimg}
                 onChange={(e) => {
                   setUser({ ...user, panimg: e.target.value });
+                  handlePanimg(e);
                 }}
               />
               <Form.Control.Feedback type="invalid">
@@ -358,22 +428,6 @@ function User() {
               </Form.Control.Feedback>
             </FloatingLabel>
           </Form.Group>
-          {/* <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-            <FloatingLabel label="Date Of Registration">
-              <Form.Control
-                type="date"
-                required
-                placeholder="Date Of Registration"
-                value={user.dor}
-                onChange={(e) => {
-                  setUser({ ...user, dor: e.target.value });
-                }}
-              />
-              <Form.Control.Feedback type="invalid">
-                Enter Date Of Registration!!
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group> */}
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel label="Experience">
               <Form.Control
@@ -389,102 +443,6 @@ function User() {
               </Form.Control.Feedback>
             </FloatingLabel>
           </Form.Group>
-          {/* <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-            <FloatingLabel label="Country">
-              <Form.Select
-                required
-                value={user.country}
-                onChange={(e) => {
-                  setUser({ ...user, country: e.target.value });
-                  // dispatch(getState(company.country));
-                }}
-              >
-                <option value="">Select Country</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </Form.Select>
-              <Form.Control.Feedback type="invalid">
-                Select Country !!
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-            <FloatingLabel label="State">
-              <Form.Select
-                required
-                value={user.state}
-                onChange={(e) => {
-                  setUser({ ...user, state: e.target.value });
-                }}
-              >
-                <option value="">Select State</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </Form.Select>
-              <Form.Control.Feedback type="invalid">
-                Select State !!
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-            <FloatingLabel label="City">
-              <Form.Select
-                required
-                value={user.city}
-                onChange={(e) => {
-                  setUser({ ...user, city: e.target.value });
-                }}
-              >
-                <option value="">Select City</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </Form.Select>
-              <Form.Control.Feedback type="invalid">
-                Select City !!
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-            <FloatingLabel label="Area">
-              <Form.Select
-                required
-                value={user.area}
-                onChange={(e) => {
-                  setUser({ ...user, area: e.target.value });
-                }}
-              >
-                <option value="">Select Area</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </Form.Select>
-              <Form.Control.Feedback type="invalid">
-                Select Area !!
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group>
-          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
-            <FloatingLabel label="Pincode">
-              <Form.Select
-                required
-                value={user.pincode}
-                onChange={(e) => {
-                  setUser({ ...user, pincode: e.target.value });
-                }}
-              >
-                <option value="">Select Pincode</option>
-                <option value="1">One</option>
-                <option value="2">Two</option>
-                <option value="3">Three</option>
-              </Form.Select>
-              <Form.Control.Feedback type="invalid">
-                Select Pincode !!
-              </Form.Control.Feedback>
-            </FloatingLabel>
-          </Form.Group> */}
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel label="Country">
               <Form.Select
@@ -603,6 +561,8 @@ function User() {
                 value={user.profileimg}
                 onChange={(e) => {
                   setUser({ ...user, profileimg: e.target.value });
+
+                  handleProfileimg(e);
                 }}
               />
               <Form.Control.Feedback type="invalid">

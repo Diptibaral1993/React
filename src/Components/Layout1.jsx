@@ -194,16 +194,7 @@ function layout1() {
                     <a href="#">LOCATION</a>
                   </Nav.Link>
                 </li>
-                <li className="nav-text">
-                  <Nav.Link
-                    as={Link}
-                    to={"/designation"}
-                    onClick={() => setHeader("DESIGNATION")}
-                  >
-                    <FaIcons.FaUserTie />
-                    <a href="#">DESIGNATION</a>
-                  </Nav.Link>
-                </li>
+
                 <li className="nav-text">
                   <Nav.Link
                     as={Link}
@@ -212,6 +203,16 @@ function layout1() {
                   >
                     <FcIcons.FcDepartment />
                     <a href="#">DEPARTMENT</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/designation"}
+                    onClick={() => setHeader("DESIGNATION")}
+                  >
+                    <FaIcons.FaUserTie />
+                    <a href="#">DESIGNATION</a>
                   </Nav.Link>
                 </li>
               </ul>

@@ -9,9 +9,28 @@ export const addDesignation=createAsyncThunk("adddesignation",async(data)=>{
     return response.json();
 })
 
-export const getDesignations=createAsyncThunk("getdesignations",async(data)=>{
+export const updateDesignation=createAsyncThunk("updatedesignation",async(data)=>{
+    const response=await fetch("https://dn.deeds.services/api/designation?id="+data.id,{
+        method:"PUT",
+        headers:{Accept:"application/json","Content-Type":"application/json"},
+        body:JSON.stringify(data)
+    });
+    return response.json();
+})
+
+export const getDesignations=createAsyncThunk("getdesignations",async()=>{
     try {
         const response=await fetch("https://dn.deeds.services/api/designation");
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+})
+
+export const getDesignationById=createAsyncThunk("getdesignationbyid",async(id)=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/designation/byid?id="+id);
         return response.json();
     } catch (error) {
         
@@ -29,14 +48,27 @@ export const getDesignationBydepartment=createAsyncThunk("getdesignationbydepart
     
 })
 
+export const ActiveInactive=createAsyncThunk("activeinactive",async(id)=>{
+    try {
+        const response=await fetch("https://dn.deeds.services/designation/activeinactive?id="+id);
+        return response.json();
+    } catch (error) {
+        
+    }
+    
+})
+
 const designationSlice=createSlice({
     name:"designation",
-    initialState:{data:[],msg:"",response:"",isSuccess:false,loading:false},
+    initialState:{data:[],editData:[],msg:"",response:"",isSuccess:false,loading:false,isUpdate:false,isDelete:false},
     reducers:{
         clearStateDesignation(state){
             state.msg="";
             state.response="";
             state.isSuccess=false;
+            state.editData=[];
+            state.isDelete=false;
+            state.isUpdate=false;
         }
     },
     extraReducers:(builder)=>{
@@ -50,6 +82,21 @@ const designationSlice=createSlice({
             state.isSuccess=true;
         }),
         builder.addCase(addDesignation.rejected,(state,action)=>{
+            state.loading=true;
+            state.msg="Something went Wrong !!";
+            state.response="danger";
+            state.isSuccess=true;
+        }),
+        builder.addCase(updateDesignation.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(updateDesignation.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.msg="Updated Successfully !!";
+            state.response="success";
+            state.isUpdate=true;
+        }),
+        builder.addCase(updateDesignation.rejected,(state,action)=>{
             state.loading=true;
             state.msg="Something went Wrong !!";
             state.response="danger";
@@ -78,6 +125,34 @@ const designationSlice=createSlice({
             state.data=action.payload.status=="404"?[]:action.payload;
         }),
         builder.addCase(getDesignationBydepartment.rejected,(state,action)=>{
+            state.loading=true;
+            state.msg="Something went Wrong !!";
+            state.response="danger";
+            state.isSuccess=true;
+        }),
+        builder.addCase(getDesignationById.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(getDesignationById.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.editData=action.payload.status=="404"?[]:action.payload;
+        }),
+        builder.addCase(getDesignationById.rejected,(state,action)=>{
+            state.loading=true;
+            state.msg="Something went Wrong !!";
+            state.response="danger";
+            state.isSuccess=true;
+        }),
+        builder.addCase(ActiveInactive.pending,(state,action)=>{
+            state.loading=true;
+        }),
+        builder.addCase(ActiveInactive.fulfilled,(state,action)=>{
+            state.loading=false;
+            state.isDelete=true;
+            state.msg="Updated Successfully !!";
+            state.response="success";
+        }),
+        builder.addCase(ActiveInactive.rejected,(state,action)=>{
             state.loading=true;
             state.msg="Something went Wrong !!";
             state.response="danger";

@@ -3,13 +3,13 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addUser=createAsyncThunk("adduser",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/user",{
-            method:"POST",
-            headers:{Accept:"application/json","Content-Type":"application/json"},
-            body:JSON.stringify(data)
-        
-        });
+        console.log(data);
+        const response=await fetch("https://dn.deeds.services/api/user", {
+            method: "POST",
+            body: data,
+            })
         return response.json();
+        
     } catch (error) {
         
     }

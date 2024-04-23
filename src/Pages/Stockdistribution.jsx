@@ -52,6 +52,8 @@ function Stockdistribution() {
     itemname: "",
   });
 
+  const [requirement, setRequirement] = useState(0);
+
   const apiExecutive = useSelector((state) => state.user);
   const apiItem = useSelector((state) => state.item);
   const apiDealer = useSelector((state) => state.dealer);
@@ -256,6 +258,21 @@ function Stockdistribution() {
                     ...distribution,
                     quantity: e.target.value,
                   });
+                }}
+              />
+              <Form.Control.Feedback type="invalid">
+                Enter Quantity!!
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
+          <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
+            <FloatingLabel label="Extra Quantity">
+              <Form.Control
+                required
+                placeholder="Extra Quantity"
+                value={requirement}
+                onChange={(e) => {
+                  setRequirement(e.target.value);
                 }}
               />
               <Form.Control.Feedback type="invalid">
