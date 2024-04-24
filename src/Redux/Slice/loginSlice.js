@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 export const getLogin = createAsyncThunk("getLogin", async (data) => {
     try {
-        const response=await fetch("https://dn.deeds.services/login?uname="+data.uname+"&pass="+data.pass);
+        const response=await fetch("http://dn.deeds.services/login?uname="+data.uname+"&pass="+data.pass);
         return response.json();
     } catch (error) { }
 })

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
  export const getMenus=createAsyncThunk("getmenus",async ()=>{
-    const response=await fetch("https://dn.deeds.services/api/menu");
+    const response=await fetch("http://dn.deeds.services/api/menu");
     const result=response.json();
     return result;
 })

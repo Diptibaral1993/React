@@ -3,7 +3,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addGodown = createAsyncThunk("addgodown", async (data) => {
   try {
-    const response = await fetch("https://dn.deeds.services/api/godown", {
+    const response = await fetch("http://dn.deeds.services/api/godown", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -17,7 +17,7 @@ export const addGodown = createAsyncThunk("addgodown", async (data) => {
 
 export const getGodown=createAsyncThunk("getgodown",async(data)=>{
   try {
-    const response=await fetch("https://dn.deeds.services/api/godown");
+    const response=await fetch("http://dn.deeds.services/api/godown");
     return response.json()
   } catch (error) {
     
@@ -26,7 +26,7 @@ export const getGodown=createAsyncThunk("getgodown",async(data)=>{
 
 export const getGodownbyCompany=createAsyncThunk("getgodownbycompany",async(id)=>{
   try {
-    const response=await fetch("https://dn.deeds.services/godown/bycompany?compid="+id);
+    const response=await fetch("http://dn.deeds.services/godown/bycompany?compid="+id);
     return response.json()
   } catch (error) {
     
@@ -67,7 +67,7 @@ const godownSlice = createSlice({
         builder.addCase(getGodown.fulfilled, (state, action) => {
           state.loading = false;
           state.isSuccess=true;
-         state.data=action.payload.status=="404"?[]:action.payload;
+         state.data=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
           state.response="success";
         }),
         builder.addCase(getGodown.rejected, (state, action) => {
@@ -82,7 +82,7 @@ const godownSlice = createSlice({
         }),
           builder.addCase(getGodownbyCompany.fulfilled, (state, action) => {
             state.loading = false;
-            state.data=action.payload.status=="404"?[]:action.payload;
+            state.data=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
             state.response="success";
           }),
           builder.addCase(getGodownbyCompany.rejected, (state, action) => {

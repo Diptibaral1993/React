@@ -3,7 +3,7 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addStock=createAsyncThunk("addstock",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/stock",{
+        const response=await fetch("http://dn.deeds.services/api/stock",{
             method:"POST",
             headers:{Accept:"application/json","Content-Type":"application/json"},
             body:JSON.stringify(data)
@@ -16,7 +16,7 @@ export const addStock=createAsyncThunk("addstock",async(data)=>{
 
 export const addAllocation=createAsyncThunk("addallocation",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/allocation",{
+        const response=await fetch("http://dn.deeds.services/api/allocation",{
             method:"POST",
             headers:{Accept:"application/json","Content-Type":"application/json"},
             body:JSON.stringify(data)
@@ -29,7 +29,7 @@ export const addAllocation=createAsyncThunk("addallocation",async(data)=>{
 
 export const addDistribution=createAsyncThunk("adddistribution",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/stock/distribution",{
+        const response=await fetch("http://dn.deeds.services/stock/distribution",{
             method:"POST",
             headers:{Accept:"application/json","Content-Type":"application/json"},
             body:JSON.stringify(data)
@@ -43,7 +43,7 @@ export const addDistribution=createAsyncThunk("adddistribution",async(data)=>{
 
 export const getStock=createAsyncThunk("getstock",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/stock");
+        const response=await fetch("http://dn.deeds.services/api/stock");
         return response.json();
     } catch (error) {
         
@@ -53,7 +53,7 @@ export const getStock=createAsyncThunk("getstock",async(data)=>{
 
 export const getAllocations=createAsyncThunk("getallocations",async()=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/allocation");
+        const response=await fetch("http://dn.deeds.services/api/allocation");
         return response.json();
     } catch (error) {
         
@@ -63,7 +63,7 @@ export const getAllocations=createAsyncThunk("getallocations",async()=>{
 
 export const getDistributions=createAsyncThunk("getdistributions",async()=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/distribution");
+        const response=await fetch("http://dn.deeds.services/api/distribution");
         return response.json();
     } catch (error) {
         
@@ -74,7 +74,7 @@ export const getDistributions=createAsyncThunk("getdistributions",async()=>{
 
 export const getStockBygni=createAsyncThunk("getstockbygni",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/stock/bygni?gdwid="+data.gwdid+"&itmid="+data.itmid);
+        const response=await fetch("http://dn.deeds.services/stock/bygni?gdwid="+data.gwdid+"&itmid="+data.itmid);
         return response.json();
     } catch (error) {
         
@@ -85,8 +85,8 @@ export const getStockBygni=createAsyncThunk("getstockbygni",async(data)=>{
 export const getStockByExecutive=createAsyncThunk("getstockbyexecutive",async(data)=>{
     try {
         
-        const response=await fetch("https://dn.deeds.services/stock/stockbyexecutive?id="+data.id+"&itmid="+data.itmid);
-        console.log("https://dn.deeds.services/stock/stockbyexecutive?id="+data.id+"&itmid="+data.itmid);
+        const response=await fetch("http://dn.deeds.services/stock/stockbyexecutive?id="+data.id+"&itmid="+data.itmid);
+        
         return response.json();
     } catch (error) {
         

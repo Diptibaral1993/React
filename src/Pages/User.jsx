@@ -220,7 +220,19 @@ function User() {
   }, []);
   return (
     <>
-      <Form noValidate validated={validated} onSubmit={handleSubmit}>
+      <Form
+        noValidate
+        validated={validated}
+        onSubmit={handleSubmit}
+        className={
+          apiResponse.loading ||
+          apiLocationResponse.loading ||
+          apiCompanyResponse.loading ||
+          apiGodownResponse.loading
+            ? "unclickable"
+            : null
+        }
+      >
         <Row>
           <Form.Group as={Col} md={4} sm={6} xs={12} className="mb-3">
             <FloatingLabel label="Name">

@@ -101,7 +101,7 @@ const companySlice = createSlice({
 
     builder.addCase(getCompanies.fulfilled, (state, action) => {
       
-      state.data=action.payload;
+      state.data=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
       state.editdata=[];
       state.loading=false;
      

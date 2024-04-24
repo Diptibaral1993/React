@@ -1,7 +1,7 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addDesignation=createAsyncThunk("adddesignation",async(data)=>{
-    const response=await fetch("https://dn.deeds.services/api/designation",{
+    const response=await fetch("http://dn.deeds.services/api/designation",{
         method:"POST",
         headers:{Accept:"application/json","Content-Type":"application/json"},
         body:JSON.stringify(data)
@@ -10,7 +10,7 @@ export const addDesignation=createAsyncThunk("adddesignation",async(data)=>{
 })
 
 export const updateDesignation=createAsyncThunk("updatedesignation",async(data)=>{
-    const response=await fetch("https://dn.deeds.services/api/designation?id="+data.id,{
+    const response=await fetch("http://dn.deeds.services/api/designation?id="+data.id,{
         method:"PUT",
         headers:{Accept:"application/json","Content-Type":"application/json"},
         body:JSON.stringify(data)
@@ -20,7 +20,7 @@ export const updateDesignation=createAsyncThunk("updatedesignation",async(data)=
 
 export const getDesignations=createAsyncThunk("getdesignations",async()=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/designation");
+        const response=await fetch("http://dn.deeds.services/api/designation");
         return response.json();
     } catch (error) {
         
@@ -30,7 +30,7 @@ export const getDesignations=createAsyncThunk("getdesignations",async()=>{
 
 export const getDesignationById=createAsyncThunk("getdesignationbyid",async(id)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/designation/byid?id="+id);
+        const response=await fetch("http://dn.deeds.services/designation/byid?id="+id);
         return response.json();
     } catch (error) {
         
@@ -40,7 +40,7 @@ export const getDesignationById=createAsyncThunk("getdesignationbyid",async(id)=
 
 export const getDesignationBydepartment=createAsyncThunk("getdesignationbydepartment",async(id)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/designation/bydepartment?did="+id);
+        const response=await fetch("http://dn.deeds.services/designation/bydepartment?did="+id);
         return response.json();
     } catch (error) {
         
@@ -50,7 +50,7 @@ export const getDesignationBydepartment=createAsyncThunk("getdesignationbydepart
 
 export const ActiveInactive=createAsyncThunk("activeinactive",async(id)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/designation/activeinactive?id="+id);
+        const response=await fetch("http://dn.deeds.services/designation/activeinactive?id="+id);
         return response.json();
     } catch (error) {
         

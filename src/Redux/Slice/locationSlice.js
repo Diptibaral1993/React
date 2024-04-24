@@ -24,7 +24,7 @@ export const getPincode=createAsyncThunk("getpincode",async(id)=>{
 
 export const addLocations=createAsyncThunk("addlocations",async(data)=>{
     try {
-        let response=await fetch("https://dn.deeds.services/api/location",{
+        let response=await fetch("http://dn.deeds.services/api/location",{
         method:"POST",
         headers:{Accept:"application/json","Content-Type":"application/json"},
         body:JSON.stringify(data)
@@ -65,7 +65,7 @@ const locationSlice=createSlice({
         }),
         builder.addCase(getCountry.fulfilled,(state,action)=>{
             state.loading=false;
-            state.Gcountry=action.payload.status=="404"?[]:action.payload;
+            state.Gcountry=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
             
         }),
         builder.addCase(getCountry.rejected,(state,action)=>{
@@ -80,7 +80,7 @@ const locationSlice=createSlice({
         builder.addCase(getState.fulfilled,(state,action)=>{
             state.loading=false;
             
-            state.Gstate=action.payload.status=="404"?[]:action.payload;
+            state.Gstate=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
         }),
         builder.addCase(getState.rejected,(state,action)=>{
             state.loading=false;
@@ -94,7 +94,7 @@ const locationSlice=createSlice({
         builder.addCase(getCity.fulfilled,(state,action)=>{
             state.loading=false;
             
-            state.Gcity=action.payload.status=="404"?[]:action.payload;
+            state.Gcity=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
         }),
         builder.addCase(getCity.rejected,(state,action)=>{
             state.loading=false;
@@ -108,7 +108,7 @@ const locationSlice=createSlice({
         builder.addCase(getArea.fulfilled,(state,action)=>{
             state.loading=false;
             
-            state.Garea=action.payload.status=="404"?[]:action.payload;
+            state.Garea=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
         }),
         builder.addCase(getArea.rejected,(state,action)=>{
             state.loading=false;
@@ -122,7 +122,7 @@ const locationSlice=createSlice({
         builder.addCase(getPincode.fulfilled,(state,action)=>{
             state.loading=false;
             
-            state.Gpincode=action.payload.status=="404"?[]:action.payload;
+            state.Gpincode=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
         }),
         builder.addCase(getPincode.rejected,(state,action)=>{
             state.loading=false;
@@ -138,7 +138,7 @@ const locationSlice=createSlice({
             state.response="success";
             state.msg="Added Successfully !!";
             state.isSuccess=true;
-            state.responsedata=action.payload.status=="404"?[]:action.payload;
+            state.responsedata=action.payload.status=="404" || action.payload.status=="400"?[]:action.payload;
         }),
         builder.addCase(addLocations.rejected,(state,action)=>{
             state.loading=false;

@@ -75,7 +75,7 @@ function Stock() {
                   dispatch(getGodownbyCompany(e.target.value));
                 }}
               >
-                <option value="">Select Company</option>
+                <option value="0">Select Company</option>
                 {apiCompany.data.map((item, index) => (
                   <option value={item.id} key={index}>
                     {item.companyname}

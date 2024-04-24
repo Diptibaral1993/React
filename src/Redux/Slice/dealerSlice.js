@@ -2,7 +2,7 @@ import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 
 export const addDealer=createAsyncThunk("adddealer",async(data)=>{
     try {
-        const response=await fetch("https://dn.deeds.services/api/dealer",{
+        const response=await fetch("http://dn.deeds.services/api/dealer",{
         method:"POST",
         headers:{Accept:"application/json","Content-Type":"application/json"},
         body:JSON.stringify(data)
@@ -14,12 +14,12 @@ export const addDealer=createAsyncThunk("adddealer",async(data)=>{
 })
 
 export const getDealer=createAsyncThunk("getdealer",async(data)=>{
-    const response=await fetch("https://dn.deeds.services/api/dealer");
+    const response=await fetch("http://dn.deeds.services/api/dealer");
     return response.json();
 })
 
 export const getDealerByExecutive=createAsyncThunk("getdealerbyexecutive",async(id)=>{
-    const response=await fetch("https://dn.deeds.services/dealer/bysalesperson?id="+id);
+    const response=await fetch("http://dn.deeds.services/dealer/bysalesperson?id="+id);
     return response.json();
 })
 
