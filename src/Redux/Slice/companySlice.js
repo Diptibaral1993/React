@@ -1,10 +1,10 @@
 
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
-
+import {API_BASE_URL} from "../../../apiPath";
 
 export const addCompany=createAsyncThunk("addcompany",async (data)=>{
   try {
-    const response=await fetch("http://dn.deeds.services/api/company",{
+    const response=await fetch(API_BASE_URL+"/api/company",{
     method:"POST",
     headers:{Accept:"application/json","Content-Type":"application/json"},
     body:JSON.stringify(data)
@@ -18,7 +18,7 @@ export const addCompany=createAsyncThunk("addcompany",async (data)=>{
 
 export const updateCompany=createAsyncThunk("updatecompany",async (data)=>{
   try {
-    const response=await fetch("http://dn.deeds.services/api/company?id="+data.id,{
+    const response=await fetch(API_BASE_URL+"/api/company?id="+data.id,{
     method:"PUT",
     headers:{Accept:"application/json","Content-Type":"application/json"},
     body:JSON.stringify(data)
@@ -31,17 +31,17 @@ export const updateCompany=createAsyncThunk("updatecompany",async (data)=>{
 })
 
 export const ActiveInactive=createAsyncThunk("activeinactive",async(id)=>{
-  const response=await fetch("http://dn.deeds.services/company/activeinactive?id="+id);
+  const response=await fetch(API_BASE_URL+"/company/activeinactive?id="+id);
   return response.json();
 })
 
 export const getCompanies=createAsyncThunk("getcompanies",async()=>{
-  const response=await fetch("http://dn.deeds.services/api/company");
+  const response=await fetch(API_BASE_URL+"/api/company");
   return response.json();
 })
 
 export const getCompanybyid=createAsyncThunk("getcompanybyid",async(id)=>{
-  const response=await fetch("http://dn.deeds.services/companybyid?id="+id);
+  const response=await fetch(API_BASE_URL+"/companybyid?id="+id);
   return response.json();
 })
   

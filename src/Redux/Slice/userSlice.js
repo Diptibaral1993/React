@@ -1,10 +1,11 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import {API_BASE_URL} from "../../../apiPath";
 
 
 export const addUser=createAsyncThunk("adduser",async(data)=>{
     try {
         console.log(data);
-        const response=await fetch("http://dn.deeds.services/api/user", {
+        const response=await fetch(API_BASE_URL+"/api/user", {
             method: "POST",
             body: data,
             })
@@ -17,7 +18,7 @@ export const addUser=createAsyncThunk("adduser",async(data)=>{
 
 export const getUsers=createAsyncThunk("getusers",async(data)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/api/user");
+        const response=await fetch(API_BASE_URL+"/api/user");
         return response.json();
     } catch (error) {
         
@@ -26,7 +27,7 @@ export const getUsers=createAsyncThunk("getusers",async(data)=>{
 
 export const getUserbyGodown=createAsyncThunk("getuserbygodown",async(id)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/user/bygodown?gwdid="+id);
+        const response=await fetch(API_BASE_URL+"/user/bygodown?gwdid="+id);
         return response.json();
     } catch (error) {
         
@@ -35,7 +36,7 @@ export const getUserbyGodown=createAsyncThunk("getuserbygodown",async(id)=>{
 
 export const getSEbyGodown=createAsyncThunk("getsebygodown",async(id)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/user/sebygodown?gwdid="+id);
+        const response=await fetch(API_BASE_URL+"/user/sebygodown?gwdid="+id);
         return response.json();
     } catch (error) {
         
@@ -44,7 +45,7 @@ export const getSEbyGodown=createAsyncThunk("getsebygodown",async(id)=>{
 
 export const getAllSE=createAsyncThunk("getallse",async()=>{
     try {
-        const response=await fetch("http://dn.deeds.services/user/allexecutive");
+        const response=await fetch(API_BASE_URL+"/user/allexecutive");
         return response.json();
     } catch (error) {
         

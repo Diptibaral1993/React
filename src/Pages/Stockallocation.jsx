@@ -13,6 +13,8 @@ import {
   addListAllocation,
   resetListAllocation,
   removeListAllocation,
+  getAllocationByid,
+  updateAllocation,
 } from "../Redux/Slice/stockSlice";
 import Loader from "../Components/Loader";
 import Toastcomponent from "../Components/Toastcomponent";
@@ -26,7 +28,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 function Stockallocation() {
   const formatDate = () => {
@@ -60,6 +62,7 @@ function Stockallocation() {
   });
 
   const dispatch = useDispatch();
+  const [isEdit, setIsEdit] = useState(false);
 
   const apiCompany = useSelector((state) => state.company);
   const apiGodown = useSelector((state) => state.godown);
@@ -101,42 +104,57 @@ function Stockallocation() {
     //console.log(e);
     dispatch(removeListAllocation(e));
   }
+
+  const handleClose = () => {
+    dispatch(clearStateStock());
+    navigate("/stock/allocation");
+  };
+
   //handle form submit here
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    //const form = event.currentTarget;
-    // if (form.checkValidity() === false) {
-    //   event.stopPropagation();
-    //   setValidated(true);
-    // } else {
-    const itemExist = apiStock.alllist.find(
-      (x) => x.executive === allocation.executive
-    );
-    if (itemExist) {
-      apiStock.alllist.map((row) => {
-        return row.executive === allocation.executive
-          ? dispatch(
-              addAllocation({
-                id: 0,
-                company: row.company,
-                godown: row.godown,
-                executive: row.executive,
-                item: row.item,
-                quantity: row.quantity,
-                allocationdt: formatDate(),
-                allocatedby: 1,
-                status: 1,
-              })
-            ).then(() =>
-              dispatch(
-                removeListAllocation({ ex: row.executive, itm: row.item })
-              )
-            )
-          : null;
-      });
+    const form = event.currentTarget;
+
+    if (isEdit) {
+      if (
+        allocation.company != "" &&
+        allocation.godown != "" &&
+        allocation.executive != "" &&
+        allocation.item != "" &&
+        allocation.quantity != ""
+      ) {
+        dispatch(updateAllocation(allocation));
+      }
     } else {
-      alert("blank");
+      const itemExist = apiStock.alllist.find(
+        (x) => x.executive === allocation.executive
+      );
+      if (itemExist) {
+        apiStock.alllist.map((row) => {
+          return row.executive === allocation.executive
+            ? dispatch(
+                addAllocation({
+                  id: 0,
+                  company: row.company,
+                  godown: row.godown,
+                  executive: row.executive,
+                  item: row.item,
+                  quantity: row.quantity,
+                  allocationdt: formatDate(),
+                  allocatedby: 1,
+                  status: 1,
+                })
+              ).then(() =>
+                dispatch(
+                  removeListAllocation({ ex: row.executive, itm: row.item })
+                )
+              )
+            : null;
+        });
+      } else {
+        alert("blank");
+      }
     }
 
     //}
@@ -157,9 +175,7 @@ function Stockallocation() {
         dispatch(clearStateStock());
       }, 1000);
     }
-  }, [apiStock]);
 
-  useEffect(() => {
     if (apiStock.data.length != 0) {
       setHdnqnty(
         apiStock.data.reduce((sum, stock) => {
@@ -167,12 +183,42 @@ function Stockallocation() {
         }, 0)
       );
     }
+
+    if (apiStock.editData.length != 0 && isEdit == false) {
+      setAllocation({
+        id: apiStock.editData[0].id,
+        company: apiStock.editData[0].company,
+        godown: apiStock.editData[0].godown,
+        executive: apiStock.editData[0].executive,
+        item: apiStock.editData[0].item,
+        quantity: apiStock.editData[0].quantity,
+        allocationdt: apiStock.editData[0].allocationdt,
+        allocatedby: apiStock.editData[0].allocatedby,
+        status: apiStock.editData[0].status,
+        companyname: apiStock.editData[0].companyname,
+        godownname: apiStock.editData[0].godownname,
+        executivename: apiStock.editData[0].executivename,
+      });
+      dispatch(getGodownbyCompany(apiStock.editData[0].company));
+      dispatch(getSEbyGodown(apiStock.editData[0].godown));
+
+      setIsEdit(true);
+    }
+
+    if (apiStock.isUpdate) {
+      handleClose();
+    }
   }, [apiStock]);
+
+  const { id } = useParams();
 
   useEffect(() => {
     //localStorage.setItem("listallocation", []);
     dispatch(getCompanies());
     dispatch(getItems());
+    if (id != 0 && id != "" && id != null) {
+      dispatch(getAllocationByid(id));
+    }
   }, []);
   return (
     <>
@@ -329,7 +375,12 @@ function Stockallocation() {
             </FloatingLabel>
           </Form.Group>
         </Row>
-        <Button variant="outline-success" type="submit" className="mt-2 ">
+        <Button
+          variant="outline-success"
+          type="submit"
+          className="mt-2 "
+          hidden={isEdit}
+        >
           Add
         </Button>{" "}
         <Button
@@ -337,20 +388,34 @@ function Stockallocation() {
           type="button"
           className="mt-2"
           onClick={handleSubmit}
+          hidden={isEdit}
         >
           Submit
+        </Button>{" "}
+        <Button
+          variant="outline-success"
+          type="button"
+          className="mt-2"
+          onClick={handleSubmit}
+          hidden={!isEdit}
+        >
+          Update
         </Button>{" "}
         <Button
           variant="outline-danger"
           type="button"
           className="mt-2"
-          onClick={() => navigate("/stock/allocation")}
+          onClick={handleClose}
         >
           Close
         </Button>
       </Form>
       <TableContainer component={Paper} className="mt-3">
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        <Table
+          sx={{ minWidth: 650 }}
+          aria-label="simple table"
+          style={{ display: isEdit ? "none" : "" }}
+        >
           <TableHead style={{ backgroundColor: "#7ba6de" }}>
             <TableRow>
               <TableCell style={{ color: "white" }}>#</TableCell>

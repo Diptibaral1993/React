@@ -43,13 +43,17 @@ function DistributionList() {
       name: "ACTION",
       cell: (row) => (
         <>
-          <span>
+          <span onClick={() => handleEdit(row.id)}>
             <CiEdit
               style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
             />
           </span>
-          <span>
+          <span
+            onClick={() => {
+              handleDelete(row.id);
+            }}
+          >
             <MdDelete
               style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
@@ -76,6 +80,13 @@ function DistributionList() {
     });
     setRecords(newdata);
   }
+
+  const handleEdit = (e) => {};
+
+  const handleDelete = (e) => {
+    if (confirm("Are You Sure Want To Remove Distribution?")) {
+    }
+  };
 
   useEffect(() => {
     dipatch(clearStateStock());

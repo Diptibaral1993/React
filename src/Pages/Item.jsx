@@ -246,6 +246,9 @@ function Item() {
                 columns={columns}
                 handleFilter={handleFilter}
                 hidden="none"
+                excel="block"
+                sheetname="ITEM MASTER"
+                fileName="ITEM MASTER"
               />
             )}
           </Col>

@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {API_BASE_URL} from "../../../apiPath";
 
 export const getLogin = createAsyncThunk("getLogin", async (data) => {
     try {
-        const response=await fetch("http://dn.deeds.services/login?uname="+data.uname+"&pass="+data.pass);
+        const response=await fetch(API_BASE_URL+"/login?uname="+data.uname+"&pass="+data.pass);
         return response.json();
     } catch (error) { }
 })

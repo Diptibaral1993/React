@@ -33,9 +33,13 @@ import BranchList from "./Pages/ListPages/BranchList";
 import StockList from "./Pages/ListPages/StockList";
 import AllocationList from "./Pages/ListPages/AllocationList";
 import DistributionList from "./Pages/ListPages/DistributionList";
+import StockReport from "./Mis/StockReport";
+import AllocationExecutiveWise from "../src/Mis/AllocationExecutiveWise";
+import DistributionDealerWise from "./Mis/DistributionDealerWise";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
+
   {
     path: "/",
     element: <App />,
@@ -61,6 +65,7 @@ const router = createBrowserRouter([
       { path: "stock/allocation", element: <AllocationList /> },
       { path: "stock/distribution", element: <DistributionList /> },
       { path: "stock/allocation/add", element: <Stockallocation /> },
+      { path: "stock/allocation/add/:id", element: <Stockallocation /> },
       { path: "stock/distribution/add", element: <Stockdistribution /> },
 
       //user Route
@@ -75,6 +80,11 @@ const router = createBrowserRouter([
       { path: "dealer", element: <DealerList /> },
       { path: "dealer/add", element: <Dealer /> },
       { path: "dealer/mapping", element: <DealerMapping /> },
+
+      //MIS Route
+      { path: "mis/stock", element: <StockReport /> },
+      { path: "mis/allocation", element: <AllocationExecutiveWise /> },
+      { path: "mis/distribution", element: <DistributionDealerWise /> },
     ],
   },
 ]);

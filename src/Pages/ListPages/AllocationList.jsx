@@ -3,9 +3,16 @@ import Datatable from "../../Components/Datatable";
 import { useDispatch, useSelector } from "react-redux";
 
 import Loader from "../../Components/Loader";
-import { getAllocations, clearStateStock } from "../../Redux/Slice/stockSlice";
+import {
+  getAllocations,
+  clearStateStock,
+  deleteAllocation,
+  getAllocationByid,
+} from "../../Redux/Slice/stockSlice";
 import { CiEdit } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
+import Toastcomponent from "../../Components/Toastcomponent";
+import { useNavigate } from "react-router-dom";
 
 function AllocationList() {
   const columns = [
@@ -43,13 +50,13 @@ function AllocationList() {
       name: "ACTION",
       cell: (row) => (
         <>
-          <span>
+          <span onClick={() => handleEdit(row.id)}>
             <CiEdit
               style={{ color: "blue", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
             />
           </span>
-          <span>
+          <span onClick={() => handleDelete(row.id)}>
             <MdDelete
               style={{ color: "red", fontSize: "1.6rem", cursor: "pointer" }}
               className="animationAction"
@@ -62,9 +69,21 @@ function AllocationList() {
   ];
 
   const allocationdata = useSelector((state) => state.stock);
-  const dipatch = useDispatch();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [records, setRecords] = useState([]);
+  const [res, setRes] = useState({ response: "", msg: "", isActive: false });
+
+  const handleEdit = (val) => {
+    navigate("add/" + val);
+  };
+
+  const handleDelete = (val) => {
+    if (confirm("Are You Sure Want To Delete?")) {
+      dispatch(deleteAllocation(val));
+    }
+  };
 
   function handleFilter(event) {
     const newdata = allocationdata.allocdata.filter((row) => {
@@ -83,17 +102,48 @@ function AllocationList() {
       allocationdata.allocdata.map((item, index) => {
         setRecords(allocationdata.allocdata);
       });
+    } else {
+      setRecords(allocationdata.allocdata);
+    }
+
+    if (allocationdata.isDelete) {
+      dispatch(getAllocations());
+      toastmessage();
+      dispatch(clearStateStock());
     }
   }, [allocationdata]);
 
   useEffect(() => {
-    dipatch(getAllocations());
-    dipatch(clearStateStock());
+    dispatch(getAllocations());
+    dispatch(clearStateStock());
   }, []);
+
+  const toastmessage = () => {
+    setRes({
+      response: allocationdata.response,
+      msg: allocationdata.msg,
+      isActive: true,
+    });
+
+    setTimeout(() => {
+      setRes({
+        response: "",
+        msg: "",
+        isActive: false,
+      });
+    }, 3000);
+  };
 
   return (
     <>
       {allocationdata.loading && <Loader />}
+      {res.isActive && (
+        <Toastcomponent
+          color={res.response}
+          msg={res.msg}
+          header="Allocation"
+        />
+      )}
       {allocationdata.allocdata != null && (
         <Datatable
           data={records}

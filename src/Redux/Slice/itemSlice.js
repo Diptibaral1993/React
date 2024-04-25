@@ -1,8 +1,9 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import {API_BASE_URL} from "../../../apiPath";
 
 export const addItem=createAsyncThunk("additem",async(data)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/api/item",{
+        const response=await fetch(API_BASE_URL+"/api/item",{
             method:"POST",
             headers:{
                 Accept: "application/json",
@@ -19,7 +20,7 @@ export const addItem=createAsyncThunk("additem",async(data)=>{
 
 export const updateItem=createAsyncThunk("updateitem",async(data)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/api/Item?id="+data.id,{
+        const response=await fetch(API_BASE_URL+"/api/Item?id="+data.id,{
             method:"PUT",
             headers:{
                 Accept: "application/json",
@@ -36,7 +37,7 @@ export const updateItem=createAsyncThunk("updateitem",async(data)=>{
 
 export const activeInactiveItem=createAsyncThunk("activeinactiveitem",async(id)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/item/activeinactive?id="+id);
+        const response=await fetch(API_BASE_URL+"/item/activeinactive?id="+id);
         return response.json();
     } catch (error) {
         
@@ -45,7 +46,7 @@ export const activeInactiveItem=createAsyncThunk("activeinactiveitem",async(id)=
 
 export const getItems=createAsyncThunk("getitems",async(data)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/api/Item");
+        const response=await fetch(API_BASE_URL+"/api/Item");
         return response.json();
     } catch (error) {
         
@@ -55,7 +56,7 @@ export const getItems=createAsyncThunk("getitems",async(data)=>{
 
 export const getItembyid=createAsyncThunk("getitembyid",async(id)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/item/byid?id="+id);
+        const response=await fetch(API_BASE_URL+"/item/byid?id="+id);
         return response.json();
     } catch (error) {
         

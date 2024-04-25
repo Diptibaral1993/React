@@ -1,30 +1,31 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {API_BASE_URL} from "../../../apiPath";
 
 
 export const getCountry=createAsyncThunk("getcountry",async()=>{
-    const response=await fetch("http://dn.deeds.services/country");
+    const response=await fetch(API_BASE_URL+"/country");
     return response.json();
 })
 export const getState=createAsyncThunk("getstate",async(id)=>{
-    const response=await fetch("http://dn.deeds.services/statebycountryid?id="+id);
+    const response=await fetch(API_BASE_URL+"/statebycountryid?id="+id);
     return response.json();
 })
 export const getCity=createAsyncThunk("getcity",async(id)=>{
-    const response=await fetch("http://dn.deeds.services/citybystateid?id="+id);
+    const response=await fetch(API_BASE_URL+"/citybystateid?id="+id);
     return response.json();
 })
 export const getArea=createAsyncThunk("getarea",async(id)=>{
-    const response=await fetch("http://dn.deeds.services/areabycityid?id="+id);
+    const response=await fetch(API_BASE_URL+"/areabycityid?id="+id);
     return response.json();
 })
 export const getPincode=createAsyncThunk("getpincode",async(id)=>{
-    const response=await fetch("http://dn.deeds.services/pinbyareaid?id="+id);
+    const response=await fetch(API_BASE_URL+"/pinbyareaid?id="+id);
     return response.json();
 })
 
 export const addLocations=createAsyncThunk("addlocations",async(data)=>{
     try {
-        let response=await fetch("http://dn.deeds.services/api/location",{
+        let response=await fetch(API_BASE_URL+"/api/location",{
         method:"POST",
         headers:{Accept:"application/json","Content-Type":"application/json"},
         body:JSON.stringify(data)

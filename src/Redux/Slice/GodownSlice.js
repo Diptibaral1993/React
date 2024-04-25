@@ -1,9 +1,10 @@
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import {API_BASE_URL} from "../../../apiPath";
 
 export const addGodown = createAsyncThunk("addgodown", async (data) => {
   try {
-    const response = await fetch("http://dn.deeds.services/api/godown", {
+    const response = await fetch(API_BASE_URL+"/api/godown", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -17,7 +18,7 @@ export const addGodown = createAsyncThunk("addgodown", async (data) => {
 
 export const getGodown=createAsyncThunk("getgodown",async(data)=>{
   try {
-    const response=await fetch("http://dn.deeds.services/api/godown");
+    const response=await fetch(API_BASE_URL+"/api/godown");
     return response.json()
   } catch (error) {
     
@@ -26,7 +27,7 @@ export const getGodown=createAsyncThunk("getgodown",async(data)=>{
 
 export const getGodownbyCompany=createAsyncThunk("getgodownbycompany",async(id)=>{
   try {
-    const response=await fetch("http://dn.deeds.services/godown/bycompany?compid="+id);
+    const response=await fetch(API_BASE_URL+"/godown/bycompany?compid="+id);
     return response.json()
   } catch (error) {
     

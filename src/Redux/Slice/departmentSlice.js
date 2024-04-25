@@ -1,7 +1,8 @@
 import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
+import {API_BASE_URL} from "../../../apiPath";
 
 export const addDepartment=createAsyncThunk("adddepartment",async(data)=>{
-    const response=await fetch("http://dn.deeds.services/api/department",{
+    const response=await fetch(API_BASE_URL+"/api/department",{
         method:"POST",
         headers:{Accept:"application/json","Content-Type":"application/json"},
         body:JSON.stringify(data)
@@ -10,7 +11,7 @@ export const addDepartment=createAsyncThunk("adddepartment",async(data)=>{
 })
 
 export const updateDepartment=createAsyncThunk("updatedepartment",async(data)=>{
-    const response=await fetch("http://dn.deeds.services/api/department?id="+data.id,{
+    const response=await fetch(API_BASE_URL+"/api/department?id="+data.id,{
         method:"PUT",
         headers:{Accept:"application/json","Content-Type":"application/json"},
         body:JSON.stringify(data)
@@ -20,7 +21,7 @@ export const updateDepartment=createAsyncThunk("updatedepartment",async(data)=>{
 
 export const getDepartments=createAsyncThunk("getdepartments",async()=>{
     try {
-        const response=await fetch("http://dn.deeds.services/api/department");
+        const response=await fetch(API_BASE_URL+"/api/department");
         return response.json();
     } catch (error) {
         
@@ -30,7 +31,7 @@ export const getDepartments=createAsyncThunk("getdepartments",async()=>{
 
 export const getDepartmentByid=createAsyncThunk("getdepartmentbyid",async(id)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/departmentbyid?id="+id);
+        const response=await fetch(API_BASE_URL+"/departmentbyid?id="+id);
         return response.json();
     } catch (error) {
         
@@ -40,7 +41,7 @@ export const getDepartmentByid=createAsyncThunk("getdepartmentbyid",async(id)=>{
 
 export const ActiveInactive=createAsyncThunk("activeinactive",async(id)=>{
     try {
-        const response=await fetch("http://dn.deeds.services/department/activeinactive?id="+id);
+        const response=await fetch(API_BASE_URL+"/department/activeinactive?id="+id);
         return response.json();
     } catch (error) {
         

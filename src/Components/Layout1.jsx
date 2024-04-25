@@ -78,7 +78,11 @@ function layout1() {
     }
   }, []);
 
-  const [submenuOpen, setSubmenuOpen] = useState({ one: false, two: false });
+  const [submenuOpen, setSubmenuOpen] = useState({
+    one: false,
+    two: false,
+    three: false,
+  });
 
   // Function to toggle submenu visibility
   const toggleSubmenu = () => {
@@ -93,6 +97,15 @@ function layout1() {
     setSubmenuOpen({
       ...submenuOpen,
       two: submenuOpen.two ? false : true,
+      one: false,
+    });
+  };
+
+  const toggleSubmenu3 = () => {
+    setSubmenuOpen({
+      ...submenuOpen,
+      three: submenuOpen.three ? false : true,
+      two: false,
       one: false,
     });
   };
@@ -298,11 +311,46 @@ function layout1() {
               </Nav.Link>
             </li>
             <li className="nav-text">
-              <Link>
+              <a className="nav-link" onClick={toggleSubmenu3}>
                 <FaIcons.FaBookOpen />
                 <span>MIS</span>
-              </Link>
+              </a>
             </li>
+
+            {submenuOpen.three && (
+              <ul style={{ paddingLeft: "35px !important" }}>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/mis/stock"}
+                    onClick={() => setHeader("STOCK REPORT")}
+                  >
+                    <FaIcons.FaUsers />
+                    <a href="#">STOCK</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/mis/allocation"}
+                    onClick={() => setHeader("ALLOCATION BY EXECUTIVE")}
+                  >
+                    <FaIcons.FaUsers />
+                    <a href="#">ALLOCATION</a>
+                  </Nav.Link>
+                </li>
+                <li className="nav-text">
+                  <Nav.Link
+                    as={Link}
+                    to={"/mis/distribution"}
+                    onClick={() => setHeader("DISTRIBUTION BY DEALER")}
+                  >
+                    <FaIcons.FaUsers />
+                    <a href="#">DISTRIBUTION</a>
+                  </Nav.Link>
+                </li>
+              </ul>
+            )}
           </ul>
         </nav>
         <Card className="text-center cust_card">
