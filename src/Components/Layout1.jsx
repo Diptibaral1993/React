@@ -18,6 +18,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { SiStatuspage } from "react-icons/si";
 function layout1() {
   const [routingHeader, setRoutingHeader] = useState("Dashboard");
+  const [isExecutive, setIsExecutive] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
   const dispatch = useDispatch();
@@ -75,6 +76,11 @@ function layout1() {
       navigate("/login");
     } else {
       handleMenu();
+
+      const prof = JSON.parse(localStorage.getItem("userinfo"));
+      if (prof[0].department == 10 && prof[0].designation == 8) {
+        setIsExecutive(true);
+      }
     }
   }, []);
 
@@ -179,7 +185,7 @@ function layout1() {
                 <span>DASHBOARD</span>
               </Nav.Link>
             </li>
-            <li className="nav-text">
+            <li className="nav-text" hidden={isExecutive}>
               <a className="nav-link" onClick={toggleSubmenu}>
                 <RiAdminLine />
                 <span>ADMINISTRATION</span>
@@ -238,7 +244,7 @@ function layout1() {
             </li>
             {submenuOpen.two && (
               <ul style={{ paddingLeft: "35px !important" }}>
-                <li className="nav-text">
+                <li className="nav-text" hidden={isExecutive}>
                   <Nav.Link
                     as={Link}
                     to={"/user"}
@@ -268,7 +274,7 @@ function layout1() {
                     <a href="#">DEALER</a>
                   </Nav.Link>
                 </li>
-                <li className="nav-text">
+                <li className="nav-text" hidden={isExecutive}>
                   <Nav.Link
                     as={Link}
                     to={"/godown"}
@@ -310,7 +316,7 @@ function layout1() {
                 <span>DISTRIBUTION</span>
               </Nav.Link>
             </li>
-            <li className="nav-text">
+            <li className="nav-text" hidden={isExecutive}>
               <a className="nav-link" onClick={toggleSubmenu3}>
                 <FaIcons.FaBookOpen />
                 <span>MIS</span>

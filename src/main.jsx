@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
@@ -36,6 +36,8 @@ import DistributionList from "./Pages/ListPages/DistributionList";
 import StockReport from "./Mis/StockReport";
 import AllocationExecutiveWise from "../src/Mis/AllocationExecutiveWise";
 import DistributionDealerWise from "./Mis/DistributionDealerWise";
+import ExItem from "./Pages/Executive/ExItem";
+import ExDealer from "./Pages/Executive/ExDealer";
 
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
@@ -74,10 +76,26 @@ const router = createBrowserRouter([
 
       //item route
       // { path: "item", element: <ItemList /> },
-      { path: "item", element: <Item /> },
+      {
+        path: "item",
+        element:
+          JSON.parse(localStorage.getItem("userinfo"))[0].designation != 8 ? (
+            <Item />
+          ) : (
+            <ExItem />
+          ),
+      },
 
       //Dealers Route
-      { path: "dealer", element: <DealerList /> },
+      {
+        path: "dealer",
+        element:
+          JSON.parse(localStorage.getItem("userinfo"))[0].designation != 8 ? (
+            <DealerList />
+          ) : (
+            <ExDealer />
+          ),
+      },
       { path: "dealer/add", element: <Dealer /> },
       { path: "dealer/mapping", element: <DealerMapping /> },
 
